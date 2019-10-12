@@ -16,7 +16,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "npx semistandard --fix",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -39,7 +39,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx semistandard --fix"
+      "pre-commit": "npm test"
     }
   }
 }
