@@ -34,5 +34,12 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "husky": "^3.0.8"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx semistandard --fix"
+    }
+  }
 }
