@@ -12,7 +12,8 @@
 /build
 
 # api keys
-.env
+# /src/constants/APIKeys.js
+
 
 # misc
 .DS_Store
