@@ -19,7 +19,7 @@ class App extends React.Component {
   }
 
   render () {
-    const overviewPage = 'overview';
+    // const overviewPage = 'overview';
     return (
       <Router>
         <Switch>
@@ -31,10 +31,9 @@ class App extends React.Component {
             <NavbarCustom Text='Home' Route='/' />
             <CreateNewForm />
           </Route>
-          <Route path={`/${overviewPage}`}>
-            <NavbarCustom Text='Home' Route='/' />
-            <SyncOverview />
-          </Route>
+          
+          <Route path="/overview/:ownerId" component={SyncOverview} />
+
           <Route path="/user-form/:formId" component={UserForm}/>
           
         </Switch>

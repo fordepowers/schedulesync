@@ -98,7 +98,7 @@ class CreateNewForm extends React.Component {
 
     firebase.addSyncFormToDatabase(form)
       .then((ref) => {
-        console.log(ref.key);
+        console.log(ref);
       })
   }
 

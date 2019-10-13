@@ -14,8 +14,6 @@ export default class UserForm extends React.Component {
           ...result.val()
         });
       });
-
-
   }
   constructor(props) {
     super(props);
