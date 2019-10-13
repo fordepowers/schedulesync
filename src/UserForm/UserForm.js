@@ -3,7 +3,6 @@ import './UserForm.css';
 import firebase from '../firebase/firebase';
 import { Form, Col, Alert, Table, Button } from 'react-bootstrap';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
-import Scheduler from './Scheduler/Scheduler';
 
 export default class UserForm extends React.Component {
   componentDidMount() {
@@ -77,7 +76,7 @@ export default class UserForm extends React.Component {
     console.log(args);
   }
 
-  
+
   convertMinutesToString(minutes) {
     let minutesInt = Number(minutes);
     let qualifier = 'AM';
@@ -122,7 +121,7 @@ export default class UserForm extends React.Component {
     if (this.state.cells[cell.target.id].active) {
       cell.target.style.backgroundColor = "#fff";
       this.setState({
-        ...this.state, 
+        ...this.state,
         cells: {
           ...this.state.cells,
           [cell.target.id]: {
@@ -132,7 +131,7 @@ export default class UserForm extends React.Component {
         }
       })
     } else {
-      cell.target.style.backgroundColor = "#F5F5F5";
+      cell.target.style.backgroundColor = "#cce5ff";
       this.setState({
         ...this.state,
         cells: {
@@ -140,8 +139,8 @@ export default class UserForm extends React.Component {
           [cell.target.id]: {
             ...this.state.cells[cell.target.id],
             active: true
-            }
           }
+        }
       })
     }
   }
@@ -197,7 +196,7 @@ export default class UserForm extends React.Component {
     return (
       <div>
         <NavbarCustom Text='Home' Route='/' />
-        <Alert variant='light'>
+        <Alert variant='primary'>
           <Alert.Heading>{this.state.title}</Alert.Heading>
           <p>{this.state.description}</p>
           <hr />
@@ -207,14 +206,13 @@ export default class UserForm extends React.Component {
             <Form.Group>
               <Form.Label>
                 Name
-          </Form.Label>
+              </Form.Label>
               <Form.Control type="plaintext" onChange={this.onChange} name="name" placeholder="Please enter your name:" value={name} />
             </Form.Group>
-            {/* <Scheduler match={this.props.match}  history={this.props.history}/> */}
-            <Table bordered hover responsive id="table">
+            <Table bordered responsive id="table">
               <thead>
                 <tr>
-                  <th colSpan='2'>{this.state.day}</th>
+                  <th colSpan='2' className='table-heading'>{this.state.day}</th>
                 </tr>
               </thead>
               <tbody>
@@ -222,10 +220,13 @@ export default class UserForm extends React.Component {
               </tbody>
             </Table>
 
+            <Form.Group>
+              <Form.Check type="checkbox" id="not-free" onChange={this.onChange} name="notFree" label="I'm not free this day" />
+            </Form.Group>
 
-            <Button size="lg" onClick={this.onSubmit}>
+            <Button disabled={!name} size="lg" onClick={this.onSubmit}>
               Submit
-        </Button>
+            </Button>
             <br />
             <br />
             <br />

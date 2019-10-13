@@ -19,7 +19,7 @@ class SyncResults extends React.Component {
           <Alert variant='light'>
             <Alert.Heading>{this.props.data.eventTitle}</Alert.Heading>
             <hr />
-            {this.props.data.datasets[0].data == undefined
+            {this.props.data.datasets[0].data === undefined
               ? <div id='loadingSpinny'>
                 <Spinner animation='grow' role='status' as='span'>
                   <span className='sr-only'>Waiting for entries...</span>
@@ -27,7 +27,7 @@ class SyncResults extends React.Component {
               </div>
               : <div>
                 <h5>Time Free for {this.props.data.eventDate}</h5>
-                <Chart type='horizontalBar' data={this.props.data} />
+                <Chart height='400' type='horizontalBar' data={this.props.data} />
               </div>}
             <hr />
             {!this.props.data.recommendedTime ? null

@@ -7,16 +7,11 @@ import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 
 class SyncOverview extends React.Component {
-
-  // componentDidMount() {
-  //   let temperature = itemsRef.child('current_temperature');
-  //   temperature.on("value", (snapshot) => {
-  //     myData = snapshot.val();
-  //     this.setState({
-  //       temp: myData
-  //     });
-  //   });
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
 
   componentDidMount() {
     const { ownerId } = this.props.match.params;
@@ -67,12 +62,11 @@ class SyncOverview extends React.Component {
       calculation.push(0);
     }
 
-
     Object.keys(data).map((key) => {
       console.log(index);
       for (let j = 0; j <= index; j++) {
         console.log(data[key].time.time[j]);
-        if (data[key].time.time[j].active == true) {
+        if (data[key].time.time[j].active === true) {
           calculation[j]++;
         }
       }
@@ -80,13 +74,8 @@ class SyncOverview extends React.Component {
 
     return calculation;
   }
-  constructor(props) {
-    super(props);
 
-    this.state = {
 
-    };
-  }
   convertMinutesToString(minutes) {
     let minutesInt = Number(minutes);
     let qualifier = 'AM';
@@ -155,16 +144,11 @@ class SyncOverview extends React.Component {
     return labels[maxIndex];
   }
 
-
-
   render() {
-    let eventDate = new Date();
-    eventDate = eventDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
     const labels = this.createLabels(this.state.from, this.state.to);
     const recommendedTime = this.checkHighestNumber(labels, this.state.data);
     const data = {
-      eventDate: new Date(this.state.selectedDate).toDateString(),
+      eventDate: new Date(this.state.selectedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
       eventTitle: this.state.title,
       recommendedTime: recommendedTime,
       labels: labels,
@@ -176,7 +160,6 @@ class SyncOverview extends React.Component {
         }
       ]
     };
-
 
     let userFormURL = window.location.href;
     const index = userFormURL.indexOf('/overview/');
