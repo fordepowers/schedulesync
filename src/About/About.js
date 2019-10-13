@@ -8,9 +8,9 @@ function About () {
       <Accordion defaultActiveKey='0'>
         <Card>
             <Card.Body>
-            <h5>About</h5>
+            <h3>About</h3>
             <br></br>
-              <h6>Welcome to Schedule Sync!</h6>
+              <h5>Welcome to Schedule Sync!</h5>
                 This app was created as a part of the DubHacks event on October 13th, 2019. We created this project in hope to bring communities and groups together by allowing them to plan events and get together easier with the ScheduleSync.
                 ScheduleSync is a webside client that allows users to see what time is most available for that group and allows them to plan accordingly using this data.
             </Card.Body>
