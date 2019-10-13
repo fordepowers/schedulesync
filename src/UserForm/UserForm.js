@@ -21,12 +21,14 @@ export default class UserForm extends React.Component {
         let start = Number(this.state.from) / 60;
         index = index - start;
         for (let i = 0; i <= index; i++) {
+          console.log(i);
           let time = Number(this.state.from) + (60 * i);
           state['cell-' + i] = {
             active: false,
             time: time
           }
 
+          console.log(state);
           this.setState({
             ...this.state,
             cells: {
@@ -179,8 +181,9 @@ export default class UserForm extends React.Component {
     array = Object.keys(this.state.cells).map(key => {
       return this.state.cells[key];
     })
-
+    
     let time = {
+      name: this.state.name,
       time: array,
     }
     firebase.setFirebaseForm(formId, time)

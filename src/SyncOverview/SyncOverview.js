@@ -5,6 +5,7 @@ import './SyncOverview.css';
 import SyncResults from './SyncResults/SyncResults';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
+import TableView from './TableView/TableView';
 
 class SyncOverview extends React.Component {
   constructor(props) {
@@ -46,7 +47,8 @@ class SyncOverview extends React.Component {
               let data = this.calculateTimes(res.val(), this.state.from, this.state.to);
               this.setState({
                 ...this.state,
-                data: data
+                data: data,
+                rawData: res.val()
               });
             })
         });
@@ -148,7 +150,8 @@ class SyncOverview extends React.Component {
     const labels = this.createLabels(this.state.from, this.state.to);
     const recommendedTime = this.checkHighestNumber(labels, this.state.data);
     const data = {
-      eventDate: new Date(this.state.selectedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+      rawData: this.state.rawData,
+      eventDate: new Date(this.state.selectedDate).toDateString(),
       eventTitle: this.state.title,
       recommendedTime: recommendedTime,
       labels: labels,
@@ -175,6 +178,7 @@ class SyncOverview extends React.Component {
           <a target='_blank' rel='noopener noreferrer' href={window.location.href}><b>{window.location.href}</b></a>
         </Alert>
         <SyncResults data={data} />
+        <TableView data={data} />
         <Alert variant='secondary'>
           <Alert.Heading>Send this link out:</Alert.Heading>
           <p>This URL is the one you send to friends and family. As they fill out the information, the responses will show up here.</p>
