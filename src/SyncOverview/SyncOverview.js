@@ -9,20 +9,48 @@ import firebase from '../firebase/firebase';
 class SyncOverview extends React.Component {
   componentDidMount () {
     const { ownerId } = this.props.match.params;
-    console.log('hey: ' + ownerId);
     if (ownerId && ownerId !== '') {
       firebase.getOverviewInformation(ownerId)
         .then((result) => {
-          console.log(result.key);
-
+          
           this.setState({
             ...result.val(),
             key: result.key
           });
+
+          firebase.getTimesForForm(this.state.key)
+            .then(res => {
+              let data = this.calculateTimes(res.val(), this.state.from, this.state.to);
+              this.setState({
+                ...this.state,
+                data: data
+              });
+            })
         });
     }
   }
 
+  calculateTimes = (data, from, to) => {
+    let start = from / 60;
+    let index = to / 120;
+    index = index - start;
+    let calculation = [];
+    for (start; start < index; start++) {
+      calculation.push(0);
+    }
+
+    Object.keys(data).map((key) => {
+      console.log(index);
+      for (let j = 0; j < index; j++) {
+        console.log(data[key].time.time[j]);
+        if (data[key].time.time[j].active == true) {
+          calculation[j]++;
+        }
+      }
+    })
+
+    return calculation;
+  }
   constructor (props) {
     super(props);
 
@@ -30,29 +58,79 @@ class SyncOverview extends React.Component {
 
     };
   }
+  convertMinutesToString(minutes) {
+    let minutesInt = Number(minutes);
+    let qualifier = 'AM';
+    if (minutesInt >= 720) {
+      minutesInt = minutesInt - 720;
+      qualifier = 'PM';
+    }
+    switch (minutesInt) {
+      case 0:
+        return '12:00' + qualifier;
+      case 60:
+        return '1:00' + qualifier;
+      case 120:
+        return '2:00' + qualifier;
+      case 180:
+        return '3:00' + qualifier;
+      case 240:
+        return '4:00' + qualifier;
+      case 300:
+        return '5:00' + qualifier;
+      case 360:
+        return '6:00' + qualifier;
+      case 420:
+        return '7:00' + qualifier;
+      case 480:
+        return '8:00' + qualifier;
+      case 540:
+        return '9:00' + qualifier;
+      case 600:
+        return '10:00' + qualifier;
+      case 660:
+        return '11:00' + qualifier;
+      case 720:
+        return '12:00' + qualifier;
+    }
+  }
+
+  createLabels = (from, to) => {
+    let array = [];
+
+    let index = to / 120;
+
+    for (let i = 0; i < index; i++)
+    {
+      let time = from + (i * 60);
+      array.push(this.convertMinutesToString(time));
+    }
+
+    return array;
+  }
+
+
 
   render () {
     let eventDate = new Date();
     eventDate = eventDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
     const recommendedTime = '9am';
-    console.log('THIS IS TITLE: ' + this.state.title);
-
+    const labels = this.createLabels(this.state.from, this.state.to);
     const data = {
-      eventDate: eventDate,
+      eventDate: new Date(this.state.selectedDate).toDateString(),
       eventTitle: this.state.title,
       recommendedTime: recommendedTime,
-      labels: ['6am', '7am', '8am', '9am', '10am', '11am', '12pm'],
+      labels: labels,
       datasets: [
         {
           label: '# of people free',
           backgroundColor: '#42A5F5',
-          data: [2, 0, 3, 9, 6, 3, 5]
+          data: this.state.data
         }
       ]
     };
 
-    console.dir(data);
 
     let userFormURL = window.location.href;
     const index = userFormURL.indexOf('/overview/');
