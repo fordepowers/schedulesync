@@ -13,11 +13,10 @@ function NavbarCustom ({ Text, Route }) {
           <img
             alt=''
             src={logo}
-            width='35'
-            height='35'
+            height='80'
+            width='100'
             className='d-inline-block align-top'
           />
-          {' Schedule Sync'}
         </Navbar.Brand>
         <Form inline>
           <Link to={Route}>
@@ -27,15 +26,20 @@ function NavbarCustom ({ Text, Route }) {
       </Navbar>
       <Navbar className='footer' bg='light' variant='light' fixed='bottom'>
         <Navbar.Brand>
-          {'Made for '}
-          <img
-            alt=''
-            src={dubhacks}
-            width='100'
-            height='33'
-            className='d-inline-block align-top'
-          />
-          {'-2019'}
+        {'Made for '}
+      
+            <img
+              alt=''
+              src={dubhacks}
+              width='100'
+              height='33'
+              className='d-inline-block align-top'
+
+            />
+        
+
+            {' 2019'}
+  
         </Navbar.Brand>
       </Navbar>
     </div>
