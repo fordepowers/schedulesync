@@ -49,6 +49,10 @@ class Firebase {
         time
       });
     }
+
+    getTimesForForm = formId => {
+      return this.db.ref('forms/' + formId + '/times').once('value');  
+    }
 }
 
 const firebase = new Firebase();
