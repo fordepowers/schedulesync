@@ -21,6 +21,10 @@ class Firebase {
     addSyncFormToDatabase = (form) => {
       return this.db.ref('/forms/').push(form)
     }
+
+    getSyncFormFromDatabase = formId => {
+      return this.db.ref('/forms/' + formId).once('value');
+    }
 }
 
 const firebase = new Firebase();
