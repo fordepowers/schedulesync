@@ -27,9 +27,8 @@ class App extends React.Component {
             <NavbarCustom Text='Create New' Route='/create-new' />
             <About />
           </Route>
-          <Route path='/create-new'>
-            <NavbarCustom Text='Home' Route='/' />
-            <CreateNewForm />
+          <Route path='/create-new' component={CreateNewForm}>
+            
           </Route>
           
           <Route path="/overview/:ownerId" component={SyncOverview} />

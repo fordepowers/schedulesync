@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Link } from 'react-router-dom';
 import firebase from '../firebase/firebase';
+import NavbarCustom from '../NavbarCustom/NavbarCustom';
 
 const INITIAL_FORM_STATE = {
   dayOfWeek: 'Monday',
@@ -35,6 +36,7 @@ class CreateNewForm extends React.Component {
     this.state = {
       ...INITIAL_FORM_STATE,
     };
+
   }
 
   onChange = event => {
@@ -84,7 +86,7 @@ class CreateNewForm extends React.Component {
     return minutes;
   }
 
-  submitForm = () => {
+  submitForm = async () => {
     let from = this.convertTo24Hour(this.state.from, this.state.fromAMPM);
     let to = this.convertTo24Hour(this.state.to, this.state.toAMPM);
     let selectedDate = this.state.selectedDate.toString();
@@ -105,9 +107,9 @@ class CreateNewForm extends React.Component {
     console.dir(form);
 
     firebase.addSyncFormToDatabase(form)
-      .then((ref) => {
-        console.log(ref);
-      })
+      .then((res) => {
+        this.props.history.push('/overview/' + res.key);
+      });
   }
 
   render() {
@@ -115,6 +117,7 @@ class CreateNewForm extends React.Component {
 
     return (
       <div className='CreateNewForm'>
+        <NavbarCustom Text='Home' Route='/' />
         <Alert variant='light'>
           <Form>
             <Form.Group as={Row}>
@@ -131,7 +134,7 @@ class CreateNewForm extends React.Component {
             <Form.Group as={Row}>
               <Form.Label column sm={2}>
                 Event Description
-              </Form.Label>
+              </Form.Label> 
               <Col sm={10}>
                 <Form.Control type="plaintext" onChange={this.onChange} value={description} name="description" placeholder="'What time can you meet?'" />
               </Col>
@@ -192,11 +195,11 @@ class CreateNewForm extends React.Component {
               />
             </InputGroup>
             <hr />
-            <Link to="/overview">
-              <Button variant="primary" disabled={this.state.title && this.state.description && this.state.selectedDate ? false : true} size="lg" onClick={this.submitForm}>
-                Submit
+
+            <Button variant="primary" disabled={this.state.title && this.state.description && this.state.selectedDate ? false : true} size="lg" onClick={this.submitForm}>
+              Submit
               </Button>
-            </Link>
+
           </Form>
         </Alert>
       </div >

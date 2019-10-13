@@ -14,11 +14,11 @@ const config = {
 class Firebase {
   constructor() {
     app.initializeApp(config);
-
+    
     this.db = app.database();
   }
 
-    addSyncFormToDatabase = (form) => {
+    addSyncFormToDatabase =  (form) => {
       return this.db.ref('/forms/').push(form)
         .then(result => {
           let formId = result.key;
@@ -26,8 +26,6 @@ class Firebase {
           return this.db.ref('/owners/').push({
             formId: formId
           })
-          .then((res) => console.log('Sucess! ' + res))
-          .catch(err => console.log('Error: ' + err))
         });
     }
 

@@ -1,31 +1,39 @@
 import React from 'react';
 import './SyncResults.css';
 import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner'
 import { Chart } from '@bit/primefaces.primereact.chart';
 
 class SyncResults extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
-      data: this.props.data,
-      eventTitle: this.props.data.eventTitle,
-      eventDate: this.props.data.eventDate,
-      recommendedTime: this.props.data.recommendedTime
     };
+
+    console.log('THiS IS EVENTTITLE: ' + this.state.eventTitle);
   }
 
-  render () {
+  render() {
     return (
       <div>
         <div className='content-section implementation'>
           <Alert variant='light'>
-            <Alert.Heading>{this.state.eventTitle}</Alert.Heading>
+            <Alert.Heading>{this.props.data.eventTitle}</Alert.Heading>
             <hr />
-            <h5>Time Free for {this.state.eventDate}</h5>
-            <Chart type='horizontalBar' data={this.state.data} />
+            {!this.props.data.eventDate ? <div id='loadingSpinny'><Spinner animation="grow" role="status" as='span'>
+              <span className="sr-only">Waiting for entries...</span>
+            </Spinner> <p>Waiting for entries...</p> </div>
+              :
+              <div><h5>Time Free for {this.props.data.eventDate}</h5>
+                <Chart type='horizontalBar' data={this.props.data} /> </div>
+            }
             <hr />
-            <h5>Recommended time:</h5>
-            <p>{this.state.recommendedTime}</p>
+            {!this.props.data.recommendedTime ? null :
+              <div>
+                <h5>Recommended time:</h5>
+                <p>{this.props.data.recommendedTime}</p>
+              </div>
+            }
           </Alert>
         </div>
       </div>
