@@ -20,7 +20,7 @@ class SyncResults extends React.Component {
           <Alert variant='light'>
             <Alert.Heading>{this.props.data.eventTitle}</Alert.Heading>
             <hr />
-            {!this.props.data.eventDate
+            {this.props.data.datasets[0].data == undefined
               ? <div id='loadingSpinny'>
                 <Spinner animation='grow' role='status' as='span'>
                   <span className='sr-only'>Waiting for entries...</span>
