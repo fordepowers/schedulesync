@@ -7,16 +7,40 @@ import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 
 class SyncOverview extends React.Component {
+
+  // componentDidMount() {
+  //   let temperature = itemsRef.child('current_temperature');
+  //   temperature.on("value", (snapshot) => {
+  //     myData = snapshot.val();
+  //     this.setState({
+  //       temp: myData
+  //     });
+  //   });
+  // }
+
   componentDidMount() {
     const { ownerId } = this.props.match.params;
+    let formRef;
     if (ownerId && ownerId !== '') {
       firebase.getOverviewInformation(ownerId)
         .then((result) => {
-
           this.setState({
             ...result.val(),
             key: result.key
           });
+          
+          
+          formRef = firebase.getFormRef(this.state.key).child('/');
+          let ev = formRef.on('value', (snapshot) => {
+            if (!snapshot.val()) {
+              return;
+            }
+            let myData = this.calculateTimes(snapshot.val(), this.state.from, this.state.to);
+            this.setState({
+              ...this.state,
+              data: myData
+            })
+          })
 
           firebase.getTimesForForm(this.state.key)
             .then(res => {

@@ -9,8 +9,7 @@ class SyncResults extends React.Component {
     super(props);
     this.state = {
     };
-
-    console.log('THiS IS EVENTTITLE: ' + this.state.eventTitle);
+    console.log('THiS IS EVENT TITLE: ' + this.state.eventTitle);
   }
 
   render () {

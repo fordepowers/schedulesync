@@ -53,6 +53,10 @@ class Firebase {
     getTimesForForm = formId => {
       return this.db.ref('forms/' + formId + '/times').once('value');  
     }
+
+    getFormRef = formId => {
+      return this.db.ref('/forms/' + formId + '/times/');
+    }
 }
 
 const firebase = new Firebase();
