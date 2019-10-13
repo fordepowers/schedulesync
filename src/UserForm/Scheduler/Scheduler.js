@@ -122,8 +122,8 @@ class Scheduler extends React.Component {
     const { formId } = this.props.match.params;
     console.log(this.state);
     let array = [];
-    array = Object.keys(this.state).map(key => {
-      return this.state[key];
+    array = Object.keys(this.state.cells).map(key => {
+      return this.state.cells[key];
     })
 
     let time = {

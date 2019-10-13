@@ -20,6 +20,10 @@ class SyncOverview extends React.Component {
 
           firebase.getTimesForForm(this.state.key)
             .then(res => {
+              if (!res.val()) {
+                return;
+              }
+              
               let data = this.calculateTimes(res.val(), this.state.from, this.state.to);
               this.setState({
                 ...this.state,
@@ -32,16 +36,17 @@ class SyncOverview extends React.Component {
 
   calculateTimes = (data, from, to) => {
     let start = from / 60;
-    let index = to / 120;
+    let index = to / 60;
     index = index - start;
     let calculation = [];
-    for (start; start < index; start++) {
+    for (let i = 0; i <= index; i++) {
       calculation.push(0);
     }
 
+
     Object.keys(data).map((key) => {
       console.log(index);
-      for (let j = 0; j < index; j++) {
+      for (let j = 0; j <= index; j++) {
         console.log(data[key].time.time[j]);
         if (data[key].time.time[j].active == true) {
           calculation[j]++;
@@ -98,9 +103,11 @@ class SyncOverview extends React.Component {
   createLabels = (from, to) => {
     let array = [];
 
-    let index = to / 120;
+    let start = from / 60;
+    let index = to / 60;
+    index = index - start;
 
-    for (let i = 0; i < index; i++)
+    for (let i = 0; i <= index; i++)
     {
       let time = from + (i * 60);
       array.push(this.convertMinutesToString(time));
