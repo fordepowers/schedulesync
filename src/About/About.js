@@ -12,9 +12,9 @@ function About () {
             <br />
             <h5>Welcome to Schedule Sync!</h5>
                 This app was created as a part of the DubHacks event on October 13th, 2019. We created this project in hope to bring communities and groups together by allowing them to plan events and get together easier with the ScheduleSync.
-                ScheduleSync is a webside client that allows users to see what time is most available for that group and allows them to plan accordingly using this data.
-          </Card.Body>
-
+                ScheduleSync is a web-side client that allows users to see what time is most available for that group and allows them to plan accordingly using this data.
+            </Card.Body>
+        
         </Card>
 
         <Card>
@@ -34,8 +34,14 @@ function About () {
                 Once people start entering in their data you will be able to see graphs and charts of what times they are available on the overview.
               </p>
               <Card.Title>Form Users</Card.Title>
-                        If you are going to enter in data in someone else's form you will first need a link or QR code provided by the creator and once you have that you will be brought to a page to input the times you are available,
+              <p>
+                        If you are going to enter in data in someone else form you will first need a link or QR code provided by the creator and once you have that you will be brought to a page to input the times you are available,
                         At this page it will ask you to input your name and then ask you to input the times you are available at the time that the creator specifies
+                        </p>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+
             </Card.Body>
           </Accordion.Collapse>
         </Card>
