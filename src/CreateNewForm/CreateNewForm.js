@@ -120,86 +120,81 @@ class CreateNewForm extends React.Component {
         <NavbarCustom Text='Home' Route='/' />
         <Alert variant='light'>
           <Form>
-            <Form.Group as={Row}>
-              <Form.Label column sm="2">
-                Event Title
+            <Col>
+              <Form.Group>
+                <Form.Label>
+                  Event Title
             </Form.Label>
-              <Col sm="10">
                 <Form.Control type="plaintext" onChange={this.onChange} name="title" placeholder="'Club Meeting'" value={title} />
-              </Col>
-            </Form.Group>
-          </Form>
+              </Form.Group>
 
-          <Form>
-            <Form.Group as={Row}>
-              <Form.Label column sm={2}>
-                Event Description
-              </Form.Label> 
-              <Col sm={10}>
+              <Form.Group>
+                <Form.Label>
+                  Event Description
+              </Form.Label>
                 <Form.Control type="plaintext" onChange={this.onChange} value={description} name="description" placeholder="'What time can you meet?'" />
-              </Col>
-            </Form.Group>
+              </Form.Group>
 
-            <Form.Group>
-              <Form.Check type="checkbox" id="all-day" name="isAllDay" onChange={this.handleToggle} checked={isAllDay} label="All Day Event?" />
-            </Form.Group>
+              <Form.Group>
+                <Form.Check type="checkbox" id="all-day" name="isAllDay" onChange={this.handleToggle} checked={isAllDay} label="All Day Event?" />
+              </Form.Group>
 
-            {
-              !this.state.isAllDay &&
-              <>
-                <InputGroup className="mb-3">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="from">From</InputGroup.Text>
-                  </InputGroup.Prepend>
+              {
+                !this.state.isAllDay &&
+                <>
+                  <InputGroup className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="from">From</InputGroup.Text>
+                    </InputGroup.Prepend>
 
-                  <select onChange={this.onChange} name="from">
-                    {DROPDOWN_TIMES.map((time, index) => {
-                      return <option value={60 * (index + 1)} key={index}>{time}</option>
-                    })}
-                  </select>
-                  <InputGroup.Append>
-                    <select name="fromAMPM" onChange={this.onChange}>
-                      <option>AM</option>
-                      <option>PM</option>
+                    <select onChange={this.onChange} name="from">
+                      {DROPDOWN_TIMES.map((time, index) => {
+                        return <option value={60 * (index + 1)} key={index}>{time}</option>
+                      })}
                     </select>
-                  </InputGroup.Append>
-                </InputGroup>
+                    <InputGroup.Append>
+                      <select name="fromAMPM" onChange={this.onChange}>
+                        <option>AM</option>
+                        <option>PM</option>
+                      </select>
+                    </InputGroup.Append>
+                  </InputGroup>
 
-                <InputGroup className="mb-3">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="from">To</InputGroup.Text>
-                  </InputGroup.Prepend>
+                  <InputGroup className="mb-3">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="from">To</InputGroup.Text>
+                    </InputGroup.Prepend>
 
-                  <select onChange={this.onChange} name="to">
-                    {DROPDOWN_TIMES.map((time, index) => {
-                      return <option value={60 * (index + 1)} key={index + 64}>{time}</option>
-                    })}
-                  </select>
-                  <InputGroup.Append>
-                    <select name="toAMPM" onChange={this.onChange}>
-                      <option>AM</option>
-                      <option>PM</option>
+                    <select onChange={this.onChange} name="to">
+                      {DROPDOWN_TIMES.map((time, index) => {
+                        return <option value={60 * (index + 1)} key={index + 64}>{time}</option>
+                      })}
                     </select>
-                  </InputGroup.Append>
-                </InputGroup>
-              </>
-            }
-
-            <Form.Label>
-              Which Day?
+                    <InputGroup.Append>
+                      <select name="toAMPM" onChange={this.onChange}>
+                        <option>AM</option>
+                        <option>PM</option>
+                      </select>
+                    </InputGroup.Append>
+                  </InputGroup>
+                </>
+              }
+              <Form.Group>
+                <Form.Label>
+                  Which Day?
             </Form.Label>
-            <InputGroup>
-              <DatePicker
-                selected={this.state.selectedDate}
-                onChange={this.handleChange}
-              />
-            </InputGroup>
-            <hr />
-
-            <Button variant="primary" disabled={this.state.title && this.state.description && this.state.selectedDate ? false : true} size="lg" onClick={this.submitForm}>
-              Submit
+                <InputGroup>
+                  <DatePicker
+                    selected={this.state.selectedDate}
+                    onChange={this.handleChange}
+                  />
+                </InputGroup>
+                <hr />
+              </Form.Group>
+              <Button variant="primary" disabled={this.state.title && this.state.description && this.state.selectedDate ? false : true} size="lg" onClick={this.submitForm}>
+                Submit
               </Button>
-
+            </Col>
           </Form>
         </Alert>
       </div >
