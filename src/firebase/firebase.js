@@ -20,10 +20,30 @@ class Firebase {
 
     addSyncFormToDatabase = (form) => {
       return this.db.ref('/forms/').push(form)
+        .then(result => {
+          let formId = result.key;
+          console.log(formId);
+          return this.db.ref('/owners/').push({
+            formId: formId
+          })
+          .then((res) => console.log('Sucess! ' + res))
+          .catch(err => console.log('Error: ' + err))
+        });
     }
 
     getSyncFormFromDatabase = formId => {
       return this.db.ref('/forms/' + formId).once('value');
+    }
+
+    getOverviewInformation = ownerId => {
+      return this.db.ref('/owners/' + ownerId).once('value')
+        .then((result) => {
+          console.log(result.val());
+          if (result.val() != null) {
+            let formId = result.val().formId;
+            return this.db.ref('/forms/' + formId).once('value');
+          }        
+        });
     }
 }
 

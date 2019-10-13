@@ -3,11 +3,24 @@ import QRCode from 'qrcode.react';
 import Alert from 'react-bootstrap/Alert';
 import './SyncOverview.css';
 import SyncResults from './SyncResults/SyncResults';
+import NavbarCustom from '../NavbarCustom/NavbarCustom';
+import firebase from '../firebase/firebase';
 
 class SyncOverview extends React.Component {
+  componentDidMount() {
+    const { ownerId } = this.props.match.params;
+    console.log(ownerId);
+    if (ownerId && ownerId != '') {
+      firebase.getOverviewInformation(ownerId)
+        .then((result) => console.log(result.val()));
+    }
+  }
   constructor (props) {
     super(props);
+
+
     this.state = {
+
     };
   }
 
@@ -37,6 +50,7 @@ class SyncOverview extends React.Component {
 
     return (
       <div>
+        <NavbarCustom Text='Home' Route='/' />
         <Alert variant='primary'>
           <p>This URL is the overview page. As data comes in about your Schedule Sync, it will appear here. </p>
           <hr />
