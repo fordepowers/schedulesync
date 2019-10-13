@@ -1,6 +1,7 @@
 import React from 'react';
 import './Scheduler.css';
 import { Table, Button } from 'react-bootstrap';
+import firebase from '../../firebase/firebase';
 
 const EventListenerMode = { capture: true };
 class Scheduler extends React.Component {
@@ -117,7 +118,20 @@ class Scheduler extends React.Component {
   }
 
   onSubmit = () => {
-    console.dir(this.state);
+    const { formId } = this.props.match.params;
+    console.log(this.state);
+    let array = [];
+    array = Object.keys(this.state).map(key => {
+      return this.state[key];
+    })
+
+    let time = {
+      time: array,
+    }
+    firebase.setFirebaseForm(formId, time)
+      .then(() => {
+        this.props.history.push('/');
+      })
   }
 
   render() {

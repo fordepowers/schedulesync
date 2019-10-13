@@ -43,6 +43,12 @@ class Firebase {
           }        
         });
     }
+    
+    setFirebaseForm = (formId, time) => {
+      return this.db.ref('/forms/' + formId + '/times/').push({
+        time
+      });
+    }
 }
 
 const firebase = new Firebase();

@@ -7,15 +7,18 @@ import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 
 class SyncOverview extends React.Component {
+
   componentDidMount () {
     const { ownerId } = this.props.match.params;
-    console.log(ownerId);
+    console.log('hey: ' + ownerId);
     if (ownerId && ownerId !== '') {
       firebase.getOverviewInformation(ownerId)
         .then((result) => {
-          console.log(result.val());
+          console.log(result.key);
+          
           this.setState({
-            ...result.val()
+            ...result.val(),
+            key: result.key
           });
         });
     }
@@ -67,9 +70,9 @@ class SyncOverview extends React.Component {
           <Alert.Heading>Send this link out:</Alert.Heading>
           <p>This URL is the one you send to friends and family. As they fill out the information, the responses will show up here.</p>
           <hr />
-          <Alert.Link>{`https://www.schedulesync.tech/${syncForm}`}</Alert.Link>
+          <Alert.Link>{`https://localhost:3000/${this.state.key}`}</Alert.Link>
           <hr />
-          <div id='qrcode'><QRCode value={`https://www.schedulesync.tech/${syncForm}`} bgColor='#e2e3e5' /></div>
+          <div id='qrcode'><QRCode value={`https://www.schedulesync.tech/${this.state.key}`} bgColor='#e2e3e5' /></div>
           <br />
           <br />
           <br />
