@@ -30,8 +30,6 @@ export default class UserForm extends React.Component {
           ...result.val(),
         });
       });
-
-
   }
 
   constructor(props) {
@@ -39,11 +37,13 @@ export default class UserForm extends React.Component {
 
     this.state = {};
   }
+
   onChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
   }
+
   convertTo24Hour = (minutes, qualifier) => {
     minutes = Number(minutes);
 
@@ -66,28 +66,6 @@ export default class UserForm extends React.Component {
 
     return minutes;
   }
-  submitForm = () => {
-    let from = this.convertTo24Hour(this.state.from, this.state.fromAMPM);
-    let to = this.convertTo24Hour(this.state.to, this.state.toAMPM);
-    let name = this.name;
-
-    if (this.state.isAllDay) {
-      from = 0;
-      to = 1440;
-    }
-    let form = {
-      name: name,
-      from: from,
-      to: to,
-    };
-    console.dir(form);
-
-    firebase.addSyncFormToDatabase(form)
-      .then((ref) => {
-        console.log(ref);
-      })
-  }
-
 
   handleOnClick = args => {
     console.log(args);
@@ -112,7 +90,7 @@ export default class UserForm extends React.Component {
             </Col>
           </Form.Group>
 
-          <Scheduler />
+          <Scheduler match={this.props.match}  history={this.props.history}/>
         </Form>
 
 
