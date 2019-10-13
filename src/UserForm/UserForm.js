@@ -1,24 +1,9 @@
 import React from 'react';
 import './UserForm.css';
 import firebase from '../firebase/firebase';
-import { Button, Form, Col, Row, ButtonToolbar, InputGroup, DropdownButton, Alert } from 'react-bootstrap';
+import { Form, Col, Alert } from 'react-bootstrap';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import Scheduler from './Scheduler/Scheduler';
-
-const DROPDOWN_TIMES = [
-  '1:00',
-  '2:00',
-  '3:00',
-  '4:00',
-  '5:00',
-  '6:00',
-  '7:00',
-  '8:00',
-  '9:00',
-  '10:00',
-  '11:00',
-  '12:00'
-]
 
 export default class UserForm extends React.Component {
   componentDidMount() {
@@ -83,7 +68,6 @@ export default class UserForm extends React.Component {
           <p>{this.state.description}</p>
           <hr />
         </Alert>
-
         <Form>
           <Col>
             <Form.Group>
@@ -92,12 +76,9 @@ export default class UserForm extends React.Component {
           </Form.Label>
               <Form.Control type="plaintext" onChange={this.onChange} name="name" placeholder="Please enter your name:" value={name} />
             </Form.Group>
-
           <Scheduler match={this.props.match}  history={this.props.history}/>
           </Col>
         </Form>
-
-
       </div>
     );
   }

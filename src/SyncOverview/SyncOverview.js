@@ -7,7 +7,6 @@ import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 
 class SyncOverview extends React.Component {
-
   componentDidMount () {
     const { ownerId } = this.props.match.params;
     console.log('hey: ' + ownerId);
@@ -15,7 +14,7 @@ class SyncOverview extends React.Component {
       firebase.getOverviewInformation(ownerId)
         .then((result) => {
           console.log(result.key);
-          
+
           this.setState({
             ...result.val(),
             key: result.key
@@ -55,7 +54,10 @@ class SyncOverview extends React.Component {
 
     console.dir(data);
 
-    const syncForm = 'syncform';
+    let userFormURL = window.location.href;
+    const index = userFormURL.indexOf('/overview/');
+    userFormURL = userFormURL.slice(0, index);
+    userFormURL = userFormURL + '/user-form/' + this.state.key;
 
     return (
       <div>
@@ -63,16 +65,16 @@ class SyncOverview extends React.Component {
         <Alert variant='primary'>
           <p>This URL is the overview page. As data comes in about your Schedule Sync, it will appear here. </p>
           <hr />
-          <Alert.Link>{window.location.href}</Alert.Link>
+          <a target='_blank' rel='noopener noreferrer' href={window.location.href}><b>{window.location.href}</b></a>
         </Alert>
         <SyncResults data={data} />
         <Alert variant='secondary'>
           <Alert.Heading>Send this link out:</Alert.Heading>
           <p>This URL is the one you send to friends and family. As they fill out the information, the responses will show up here.</p>
           <hr />
-          <Alert.Link>{`https://localhost:3000/${this.state.key}`}</Alert.Link>
+          <a target='_blank' rel='noopener noreferrer' href={userFormURL}><b>{userFormURL}</b></a>
           <hr />
-          <div id='qrcode'><QRCode value={`https://www.schedulesync.tech/${this.state.key}`} bgColor='#e2e3e5' /></div>
+          <div id='qrcode'><QRCode value={userFormURL} bgColor='#e2e3e5' /></div>
           <br />
           <br />
           <br />
