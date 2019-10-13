@@ -28,6 +28,7 @@ class SyncOverview extends React.Component {
 
 
           formRef = firebase.getFormRef(this.state.key).child('/');
+
           let ev = formRef.on('value', (snapshot) => {
             if (!snapshot.val()) {
               return;
@@ -35,9 +36,12 @@ class SyncOverview extends React.Component {
             let myData = this.calculateTimes(snapshot.val(), this.state.from, this.state.to);
             this.setState({
               ...this.state,
-              data: myData
+              data: myData,
+              rawData: snapshot.val()
             })
           })
+
+
 
           firebase.getTimesForForm(this.state.key)
             .then(res => {
