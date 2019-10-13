@@ -94,7 +94,6 @@ export default class UserForm extends React.Component {
             </Form.Group>
 
           <Scheduler match={this.props.match}  history={this.props.history}/>
-            <Scheduler />
           </Col>
         </Form>
 
