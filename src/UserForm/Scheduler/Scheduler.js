@@ -3,7 +3,7 @@ import './Scheduler.css';
 import { Table, Button } from 'react-bootstrap';
 import firebase from '../../firebase/firebase';
 
-const EventListenerMode = {capture: true};
+const EventListenerMode = { capture: true };
 class Scheduler extends React.Component {
   constructor(props) {
     super(props);
@@ -40,7 +40,7 @@ class Scheduler extends React.Component {
       qualifier = 'PM';
     }
     switch (minutesInt) {
-      case 0: 
+      case 0:
         return '12:00' + qualifier;
       case 60:
         return '1:00' + qualifier;
@@ -57,7 +57,7 @@ class Scheduler extends React.Component {
       case 420:
         return '7:00' + qualifier;
       case 480:
-        return '8:00'+ qualifier; 
+        return '8:00' + qualifier;
       case 540:
         return '9:00' + qualifier;
       case 600:
@@ -71,20 +71,17 @@ class Scheduler extends React.Component {
 
   onCellClick = cell => {
     console.log(cell.target);
-    cell.target.style.backgroundColor = "#F5F5F5";
-    this.setState({
-      ...this.state,
-      [cell.target.id]: {
-        ...this.state[cell.target.id],
-        active: true
-      }
-    })
-  }
-
-  onDrag = cell => {
-    console.dir(cell.target);
-    if (cell.buttons == 1 && cell.target.id != 'time' && !this.state[cell.target.id].active) {
-      cell.target.style.backgroundColor="#F5F5F5";
+    if (this.state[cell.target.id].active) {
+      cell.target.style.backgroundColor = "#fff";
+      this.setState({
+        ...this.state,
+        [cell.target.id]: {
+          ...this.state[cell.target.id],
+          active: false
+        }
+      })
+    } else {
+      cell.target.style.backgroundColor = "#F5F5F5";
       this.setState({
         ...this.state,
         [cell.target.id]: {
@@ -93,9 +90,8 @@ class Scheduler extends React.Component {
         }
       })
     }
-    
   }
-  
+
   createTable = data => {
     let times = [];
     let index = data.to / 60;
@@ -115,7 +111,7 @@ class Scheduler extends React.Component {
       return (
         <tr key={index} className='time'>
           <td>{this.convertMinutesToString(cell.time)}</td>
-          <td id={'cell-' + index}  onClick={this.onCellClick} onMouseMove={this.onDrag}>Y</td>
+          <td id={'cell-' + index} onClick={this.onCellClick}>Select</td>
         </tr>
       )
     })
@@ -140,7 +136,7 @@ class Scheduler extends React.Component {
 
   render() {
     let data = {
-      day: 'Wednesday',
+      day: 'October 13th, 2019',
       from: 0,
       to: 720,
     }
@@ -150,19 +146,23 @@ class Scheduler extends React.Component {
         <Table bordered hover responsive id="table">
           <thead>
             <tr>
-              <th></th>
-              <th>{data.day}</th>
+              <th colSpan='2'>{data.day}</th>
             </tr>
           </thead>
           <tbody>
             {this.createTable(data)}
           </tbody>
-
         </Table>
+
 
         <Button onClick={this.onSubmit}>
           Submit
         </Button>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     )
   }

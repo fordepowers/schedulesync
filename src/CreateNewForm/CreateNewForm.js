@@ -1,9 +1,8 @@
 import React from 'react';
 import './CreateNewForm.css';
-import { Button, Form, Col, Row, InputGroup, Alert } from 'react-bootstrap';
+import { Button, Form, Col, InputGroup, Alert } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Link } from 'react-router-dom';
 import firebase from '../firebase/firebase';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
 
