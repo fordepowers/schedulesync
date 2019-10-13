@@ -8,6 +8,7 @@ import {
   Route
 } from 'react-router-dom';
 import './App.css';
+import SyncOverview from './SyncOverview/SyncOverview';
 
 class App extends React.Component {
   constructor (props) {
@@ -17,6 +18,7 @@ class App extends React.Component {
   }
 
   render () {
+    const overviewPage = 'overview';
     return (
       <Router>
         <Switch>
@@ -27,6 +29,10 @@ class App extends React.Component {
           <Route path='/create-new'>
             <NavbarCustom Text='Home' Route='/' />
             <CreateNewForm />
+          </Route>
+          <Route path={`/${overviewPage}`}>
+            <NavbarCustom Text='Home' Route='/' />
+            <SyncOverview />
           </Route>
         </Switch>
       </Router>

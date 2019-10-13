@@ -12,7 +12,7 @@
 /build
 
 # api keys
-# /src/constants/APIKeys.js
+/src/constants/APIKeys.js
 
 
 # misc
