@@ -45,7 +45,7 @@ class SyncOverview extends React.Component {
         {
           label: '# of people free',
           backgroundColor: '#42A5F5',
-          data: [65, 59, 80, 81, 56, 55, 40]
+          data: [2, 0, 3, 9, 6, 3, 5]
         }
       ]
     };
