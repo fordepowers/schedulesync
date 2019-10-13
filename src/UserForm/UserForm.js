@@ -1,7 +1,8 @@
 import React from 'react';
 import './UserForm.css';
 import firebase from '../firebase/firebase';
-import { Button, Form, Col, Row, ButtonToolbar, InputGroup, DropdownButton } from 'react-bootstrap';
+import { Button, Form, Col, Row, ButtonToolbar, InputGroup, DropdownButton, Alert } from 'react-bootstrap';
+import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import Scheduler from './Scheduler/Scheduler';
 
 const DROPDOWN_TIMES = [
@@ -98,21 +99,24 @@ export default class UserForm extends React.Component {
 
     return (
       <div>
-
-        <h1>{this.state.title}</h1>
-        <h1>{this.state.description}</h1>
+        <NavbarCustom Text='Home' Route='/' />
+        <Alert variant='light'>
+          <Alert.Heading>{this.state.title}</Alert.Heading>
+          <p>{this.state.description}</p>
+          <hr />
+        </Alert>
 
         <Form>
-          <Form.Group as={Row}>
-            <Form.Label column sm="2">
-              Name
+          <Col>
+            <Form.Group>
+              <Form.Label>
+                Name
           </Form.Label>
-            <Col sm="10">
-              <Form.Control type="plaintext" onChange={this.onChange} name="name" placeholder="Name" value={name} />
-            </Col>
-          </Form.Group>
+              <Form.Control type="plaintext" onChange={this.onChange} name="name" placeholder="Please enter your name:" value={name} />
+            </Form.Group>
 
-          <Scheduler />
+            <Scheduler />
+          </Col>
         </Form>
 
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import './About.css';
+import photo from './photo.jpg';
 import { Accordion, Card } from 'react-bootstrap';
 
 function About () {
@@ -14,9 +15,8 @@ function About () {
                 This app was created as a part of the DubHacks event on October 13th, 2019. We created this project in hope to bring communities and groups together by allowing them to plan events and get together easier with the ScheduleSync.
                 ScheduleSync is a web-side client that allows users to see what time is most available for that group and allows them to plan accordingly using this data.
             </Card.Body>
-        
         </Card>
-
+      
         <Card>
           <Card.Header>
             <Accordion.Toggle className='accordion-header' as={Card.Body} eventKey='1'>
