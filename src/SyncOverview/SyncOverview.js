@@ -7,12 +7,12 @@ import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 
 class SyncOverview extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     const { ownerId } = this.props.match.params;
     if (ownerId && ownerId !== '') {
       firebase.getOverviewInformation(ownerId)
         .then((result) => {
-          
+
           this.setState({
             ...result.val(),
             key: result.key
@@ -23,7 +23,7 @@ class SyncOverview extends React.Component {
               if (!res.val()) {
                 return;
               }
-              
+
               let data = this.calculateTimes(res.val(), this.state.from, this.state.to);
               this.setState({
                 ...this.state,
@@ -56,7 +56,7 @@ class SyncOverview extends React.Component {
 
     return calculation;
   }
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -107,8 +107,7 @@ class SyncOverview extends React.Component {
     let index = to / 60;
     index = index - start;
 
-    for (let i = 0; i <= index; i++)
-    {
+    for (let i = 0; i <= index; i++) {
       let time = from + (i * 60);
       array.push(this.convertMinutesToString(time));
     }
@@ -116,14 +115,30 @@ class SyncOverview extends React.Component {
     return array;
   }
 
+  checkHighestNumber = (labels, data) => {
+    if (!data) {
+      return;
+    }
+    var max = data[0];
+    var maxIndex = 0;
+    for (var i = 1; i < data.length; i++) {
+      if (data[i] > max) {
+        maxIndex = i;
+        max = data[i];
+      }
+    }
+
+    return labels[maxIndex];
+  }
 
 
-  render () {
+
+  render() {
     let eventDate = new Date();
     eventDate = eventDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-    const recommendedTime = '9am';
     const labels = this.createLabels(this.state.from, this.state.to);
+    const recommendedTime = this.checkHighestNumber(labels, this.state.data);
     const data = {
       eventDate: new Date(this.state.selectedDate).toDateString(),
       eventTitle: this.state.title,
