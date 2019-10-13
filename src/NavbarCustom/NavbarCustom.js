@@ -28,18 +28,14 @@ function NavbarCustom ({ Text, Route }) {
       <Navbar className='footer' bg='light' variant='light' fixed='bottom'>
         <Navbar.Brand>
           {'Made for '}
-
           <img
             alt=''
             src={dubhacks}
             width='100'
             height='33'
             className='d-inline-block align-top'
-
           />
-
           {' 2019'}
-
         </Navbar.Brand>
       </Navbar>
     </div>
