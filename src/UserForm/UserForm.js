@@ -20,8 +20,7 @@ const DROPDOWN_TIMES = [
 ]
 
 export default class UserForm extends React.Component {
-
-  componentDidMount() {
+  componentDidMount () {
     const { formId } = this.props.match.params;
 
     firebase.getSyncFormFromDatabase(formId)
@@ -34,7 +33,8 @@ export default class UserForm extends React.Component {
 
 
   }
-  constructor(props) {
+
+  constructor (props) {
     super(props);
 
     this.state = {};
