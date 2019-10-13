@@ -7,22 +7,22 @@ import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 
 class SyncOverview extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     const { ownerId } = this.props.match.params;
     console.log(ownerId);
-    if (ownerId && ownerId != '') {
+    if (ownerId && ownerId !== '') {
       firebase.getOverviewInformation(ownerId)
         .then((result) => {
           console.log(result.val());
           this.setState({
             ...result.val()
-          })
+          });
         });
     }
   }
+
   constructor (props) {
     super(props);
-
 
     this.state = {
 
@@ -52,7 +52,6 @@ class SyncOverview extends React.Component {
 
     console.dir(data);
 
-    const overviewPage = 'overview';
     const syncForm = 'syncform';
 
     return (

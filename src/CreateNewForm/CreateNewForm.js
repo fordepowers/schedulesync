@@ -39,7 +39,7 @@ class CreateNewForm extends React.Component {
 
   }
 
-  onChange = event => {
+  onChange = (event) => {
     this.setState({
       ...this.state,
       [event.target.name]: event.target.value

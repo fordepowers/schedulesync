@@ -27,14 +27,12 @@ class App extends React.Component {
             <NavbarCustom Text='Create New' Route='/create-new' />
             <About />
           </Route>
-          <Route path='/create-new' component={CreateNewForm}>
-            
-          </Route>
-          
-          <Route path="/overview/:ownerId" component={SyncOverview} />
+          <Route path='/create-new' component={CreateNewForm} />
 
-          <Route path="/user-form/:formId" component={UserForm}/>
-          
+          <Route path='/overview/:ownerId' component={SyncOverview} />
+
+          <Route path='/user-form/:formId' component={UserForm} />
+
         </Switch>
       </Router>
     );
