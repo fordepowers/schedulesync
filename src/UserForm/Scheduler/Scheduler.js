@@ -3,7 +3,6 @@ import './Scheduler.css';
 import { Table, Button } from 'react-bootstrap';
 import firebase from '../../firebase/firebase';
 
-const EventListenerMode = { capture: true };
 class Scheduler extends React.Component {
   constructor(props) {
     super(props);
@@ -66,6 +65,8 @@ class Scheduler extends React.Component {
         return '11:00' + qualifier;
       case 720:
         return '12:00' + qualifier;
+      default:
+        return;
     }
   }
 
@@ -130,7 +131,7 @@ class Scheduler extends React.Component {
     }
     firebase.setFirebaseForm(formId, time)
       .then(() => {
-        this.props.history.push('/');
+        this.props.history.push('/thanks');
       })
   }
 
@@ -155,7 +156,7 @@ class Scheduler extends React.Component {
         </Table>
 
 
-        <Button onClick={this.onSubmit}>
+        <Button size="lg" onClick={this.onSubmit}>
           Submit
         </Button>
         <br />
