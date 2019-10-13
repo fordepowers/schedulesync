@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import SyncOverview from './SyncOverview/SyncOverview';
+import UserForm from './UserForm/UserForm';
 
 class App extends React.Component {
   constructor (props) {
@@ -34,6 +35,8 @@ class App extends React.Component {
             <NavbarCustom Text='Home' Route='/' />
             <SyncOverview />
           </Route>
+          <Route path="/user-form/:formId" component={UserForm}/>
+          
         </Switch>
       </Router>
     );

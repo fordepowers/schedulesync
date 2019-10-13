@@ -1,14 +1,30 @@
 import React from 'react';
 import './UserForm.css';
+import firebase from '../firebase/firebase';
 
-class UserForm extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render()
-    {
-        return <h1>
-            User Form
-        </h1>
-    }
+export default class UserForm extends React.Component {
+
+  componentDidMount() {
+    const { formId } = this.props.match.params;
+
+    firebase.getSyncFormFromDatabase(formId)
+      .then((result) => {
+        console.log(result.val());
+        this.setState({
+          ...result.val()
+        });
+      });
+
+
+  }
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
+
+  render() {
+    return <h1>{this.state.title}</h1>
+  }
 }
