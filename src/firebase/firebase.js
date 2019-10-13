@@ -14,7 +14,7 @@ const config = {
 class Firebase {
   constructor() {
     app.initializeApp(config);
-
+    
     this.db = app.database();
   }
 
@@ -26,8 +26,6 @@ class Firebase {
           return this.db.ref('/owners/').push({
             formId: formId
           })
-          .then((res) => console.log('Sucess! ' + res))
-          .catch(err => console.log('Error: ' + err))
         });
     }
 

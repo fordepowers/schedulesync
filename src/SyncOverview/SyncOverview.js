@@ -7,17 +7,22 @@ import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 
 class SyncOverview extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     const { ownerId } = this.props.match.params;
     console.log(ownerId);
-    if (ownerId && ownerId != '') {
+    if (ownerId && ownerId !== '') {
       firebase.getOverviewInformation(ownerId)
-        .then((result) => console.log(result.val()));
+        .then((result) => {
+          console.log(result.val());
+          this.setState({
+            ...result.val()
+          });
+        });
     }
   }
+
   constructor (props) {
     super(props);
-
 
     this.state = {
 
@@ -28,12 +33,12 @@ class SyncOverview extends React.Component {
     let eventDate = new Date();
     eventDate = eventDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-    const eventTitle = 'Event Title';
     const recommendedTime = '9am';
+    console.log('THIS IS TITLE: ' + this.state.title);
 
     const data = {
       eventDate: eventDate,
-      eventTitle: eventTitle,
+      eventTitle: this.state.title,
       recommendedTime: recommendedTime,
       labels: ['6am', '7am', '8am', '9am', '10am', '11am', '12pm'],
       datasets: [
@@ -45,7 +50,8 @@ class SyncOverview extends React.Component {
       ]
     };
 
-    const overviewPage = 'overview';
+    console.dir(data);
+
     const syncForm = 'syncform';
 
     return (
@@ -54,9 +60,9 @@ class SyncOverview extends React.Component {
         <Alert variant='primary'>
           <p>This URL is the overview page. As data comes in about your Schedule Sync, it will appear here. </p>
           <hr />
-          <Alert.Link>{`https://www.schedulesync.tech/${overviewPage}`}</Alert.Link>
+          <Alert.Link>{window.location.href}</Alert.Link>
         </Alert>
-        {data ? <SyncResults data={data} /> : null}
+        <SyncResults data={data} />
         <Alert variant='secondary'>
           <Alert.Heading>Send this link out:</Alert.Heading>
           <p>This URL is the one you send to friends and family. As they fill out the information, the responses will show up here.</p>
