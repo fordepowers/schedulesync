@@ -27,7 +27,7 @@ class SyncResults extends React.Component {
               </div>
               : <div>
                 <h5>Time Free for {this.props.data.eventDate}</h5>
-                <Chart height='400' type='horizontalBar' data={this.props.data} />
+                <Chart type='horizontalBar' data={this.props.data} />
               </div>}
             <hr />
             {!this.props.data.recommendedTime ? null

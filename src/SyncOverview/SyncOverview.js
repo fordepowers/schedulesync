@@ -6,6 +6,7 @@ import SyncResults from './SyncResults/SyncResults';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 import TableView from './TableView/TableView';
+import { Accordion, Card } from 'react-bootstrap';
 
 class SyncOverview extends React.Component {
   constructor(props) {
@@ -24,8 +25,8 @@ class SyncOverview extends React.Component {
             ...result.val(),
             key: result.key
           });
-          
-          
+
+
           formRef = firebase.getFormRef(this.state.key).child('/');
           let ev = formRef.on('value', (snapshot) => {
             if (!snapshot.val()) {
@@ -178,7 +179,20 @@ class SyncOverview extends React.Component {
           <a target='_blank' rel='noopener noreferrer' href={window.location.href}><b>{window.location.href}</b></a>
         </Alert>
         <SyncResults data={data} />
-        <TableView data={data} />
+        <Accordion defaultActiveKey='0'>
+          <Card>
+            <Card.Header>
+              <Accordion.Toggle className='accordion-header' as={Card.Body} eventKey='1'>
+                <h5>Individuals</h5>
+              </Accordion.Toggle>
+              <Accordion.Collapse className='accordion-collapse' eventKey='1'>
+                <Card.Body>
+                  <TableView data={data} />
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card.Header>
+          </Card>
+        </Accordion>
         <Alert variant='secondary'>
           <Alert.Heading>Send this link out:</Alert.Heading>
           <p>This URL is the one you send to friends and family. As they fill out the information, the responses will show up here.</p>
