@@ -1,7 +1,7 @@
 import React from 'react';
 import './NavbarCustom.css';
 import { Navbar, Button, Form } from 'react-bootstrap';
-import logo from '../logo.svg';
+import logo from './logo.jpg';
 import dubhacks from '../dubhacks.svg';
 import { Link } from 'react-router-dom';
 
@@ -13,8 +13,8 @@ function NavbarCustom ({ Text, Route }) {
           <img
             alt=''
             src={logo}
-            width='35'
-            height='35'
+            height='30'
+            width='30'
             className='d-inline-block align-top'
           />
           {' Schedule Sync'}
@@ -28,14 +28,18 @@ function NavbarCustom ({ Text, Route }) {
       <Navbar className='footer' bg='light' variant='light' fixed='bottom'>
         <Navbar.Brand>
           {'Made for '}
+
           <img
             alt=''
             src={dubhacks}
             width='100'
             height='33'
             className='d-inline-block align-top'
+
           />
-          {'-2019'}
+
+          {' 2019'}
+
         </Navbar.Brand>
       </Navbar>
     </div>
