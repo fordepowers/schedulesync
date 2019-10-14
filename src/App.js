@@ -10,6 +10,7 @@ import './App.css';
 import SyncOverview from './SyncOverview/SyncOverview';
 import UserForm from './UserForm/UserForm';
 import Thanks from './Thanks/Thanks';
+import NotFound from './NotFound/NotFound';
 
 class App extends React.Component {
   constructor (props) {
@@ -23,10 +24,11 @@ class App extends React.Component {
       <Router>
         <Switch>
           <Route exact path='/' component={About} />
-          <Route path='/create-new' component={CreateNewForm} />
+          <Route exact path='/create-new' component={CreateNewForm} />
           <Route path='/overview/:ownerId' component={SyncOverview} />
           <Route path='/user-form/:formId' component={UserForm} />
-          <Route path='/thanks' component={Thanks} />
+          <Route exact path='/thanks' component={Thanks} />
+          <Route path='/' component={NotFound} />
         </Switch>
       </Router>
     );

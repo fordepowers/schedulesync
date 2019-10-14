@@ -2,9 +2,10 @@ import React from 'react';
 import { Table } from 'react-bootstrap';
 
 export default class TableView extends React.Component {
-
   constructor(props) {
     super(props);
+    this.state = {
+    };
   }
 
   createTable = () => {
@@ -30,7 +31,7 @@ export default class TableView extends React.Component {
                 {rawDataKeys.map(key => {
                   let user = this.props.data.rawData[key];
 
-                  if (user.time.time[index].active == true) {
+                  if (user.time.time[index].active === true) {
                     return (
                       <tr>
                       <td>{user.time.name}</td>
