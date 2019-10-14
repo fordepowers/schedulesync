@@ -8,6 +8,7 @@ import firebase from '../firebase/firebase';
 import TableView from './TableView/TableView';
 import { Accordion, Card } from 'react-bootstrap';
 
+
 class SyncOverview extends React.Component {
   constructor(props) {
     super(props);
@@ -21,11 +22,12 @@ class SyncOverview extends React.Component {
     if (ownerId && ownerId !== '') {
       firebase.getOverviewInformation(ownerId)
         .then((result) => {
-          this.setState({
-            ...result.val(),
-            key: result.key
-          });
-
+          if (result) {
+            this.setState({
+              ...result.val(),
+              key: result.key
+            });
+          }
 
           formRef = firebase.getFormRef(this.state.key).child('/');
 
@@ -40,8 +42,6 @@ class SyncOverview extends React.Component {
               rawData: snapshot.val()
             })
           })
-
-
 
           firebase.getTimesForForm(this.state.key)
             .then(res => {
@@ -173,7 +173,7 @@ class SyncOverview extends React.Component {
     const index = userFormURL.indexOf('/overview/');
     userFormURL = userFormURL.slice(0, index);
     userFormURL = userFormURL + '/user-form/' + this.state.key;
-
+    
     return (
       <div>
         <NavbarCustom Text='Home' Route='/' />
