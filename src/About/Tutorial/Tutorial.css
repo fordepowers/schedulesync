@@ -1,5 +1,9 @@
-.jumbo {
-  background: inherit;
+.accordion-header {
+padding-top: .5%;
+padding-bottom: .3%;
+}
+
+.accordion-collapse {
 }
 
 img {
