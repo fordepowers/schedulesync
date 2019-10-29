@@ -1,5 +1,6 @@
 import React from 'react';
 import About from './About/About';
+import Tutorial from './About/Tutorial/Tutorial';
 import CreateNewForm from './CreateNewForm/CreateNewForm';
 import {
   BrowserRouter as Router,
@@ -25,6 +26,7 @@ class App extends React.Component {
         <Switch>
           <Route exact path='/' component={About} />
           <Route exact path='/create-new' component={CreateNewForm} />
+          <Route exact path='/tutorial' component={Tutorial} />
           <Route path='/overview/:ownerId' component={SyncOverview} />
           <Route path='/user-form/:formId' component={UserForm} />
           <Route exact path='/thanks' component={Thanks} />
