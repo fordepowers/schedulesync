@@ -18,10 +18,12 @@ class About extends React.Component {
           <h3>Welcome to Schedule Sync!</h3>
           <hr />
           <p>This app web app was created to allow users to see what time or day works best for a company, club, or any group of people. We built this as a part of <a href='https://www.dubhacks.co'>DubHacks</a> on October 13th, 2019.</p>
-          <br />
           <div className='button-container'>
-            <Button variant='outline-primary' size='lg' block href='/tutorial'>Tutorial</Button>
-            <Button variant='outline-dark' size='lg' block href='https://github.com/fordepowers/schedulesync'>GitHub</Button>
+            <Link to='/tutorial'>
+              <Button variant='outline-primary' size='lg' block>Tutorial</Button>
+            </Link>
+            <br />
+            <Button variant='outline-dark' size='lg' block href='https://github.com/fordepowers/schedulesync' target='_blank'>GitHub</Button>
           </div>
         </Jumbotron>
       </div>
