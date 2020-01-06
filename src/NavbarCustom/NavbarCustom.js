@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 function NavbarCustom ({ Text, Route }) {
   return (
     <div>
-      <Navbar className='justify-content-between' bg='dark' variant='dark' sticky='top'>
+      <Navbar className='justify-content-between' bg='light' variant='light' sticky='top'>
         <Navbar.Brand>
           <img
             alt=''

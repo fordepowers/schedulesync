@@ -3,39 +3,29 @@ import './CreateNewForm.css';
 import { Button, Form, Col, InputGroup, Alert } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-daterangepicker/daterangepicker.css';
+import DatetimeRangePicker from 'react-bootstrap-datetimerangepicker';
+import moment from 'moment';
 import firebase from '../firebase/firebase';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
-
-const INITIAL_FORM_STATE = {
-  dayOfWeek: 'Monday',
-  from: 60,
-  fromAMPM: 'AM',
-  to: 60,
-  toAMPM: 'AM',
-};
-
-const DROPDOWN_TIMES = [
-  '1:00',
-  '2:00',
-  '3:00',
-  '4:00',
-  '5:00',
-  '6:00',
-  '7:00',
-  '8:00',
-  '9:00',
-  '10:00',
-  '11:00',
-  '12:00'
-]
 
 class CreateNewForm extends React.Component {
   constructor(props) {
     super(props);
+    this.handleApply = this.handleApply.bind(this);
     this.state = {
-      ...INITIAL_FORM_STATE,
+      startDate: moment().subtract(29, 'days'),
+      endDate: moment(),
+      ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+      },
     };
-
   }
 
   onChange = (event) => {
@@ -45,63 +35,31 @@ class CreateNewForm extends React.Component {
     });
   }
 
-  handleChange = date => {
-    this.setState({
-      ...this.state,
-      selectedDate: date
-    });
-  };
-
   handleToggle = event => {
-
     console.log(event.target.checked);
-
     this.setState({
       ...this.state,
       isAllDay: event.target.checked
     });
   }
 
-  convertTo24Hour = (minutes, qualifier) => {
-    minutes = Number(minutes);
-
-    if (minutes === 0 || minutes === 720) {
-      if (qualifier === 'AM') {
-        minutes = 0;
-      }
-      else {
-        minutes = 720;
-      }
-    }
-    else {
-      if (qualifier === 'AM') {
-        // return minutes;
-      }
-      else {
-        minutes = minutes + 720;
-      }
-    }
-
-    return minutes;
+  handleApply(event, picker) {
+    this.setState({
+      startDate: picker.startDate,
+      endDate: picker.endDate,
+    });
   }
 
   submitForm = async () => {
-    let from = this.convertTo24Hour(this.state.from, this.state.fromAMPM);
-    let to = this.convertTo24Hour(this.state.to, this.state.toAMPM);
-    let selectedDate = this.state.selectedDate.toString();
-
-    if (this.state.isAllDay) {
-      from = 0;
-      to = 1440;
+    let dateAndTime = this.state.startDate + ' - ' + this.state.endDate;
+    if (this.state.startDate === this.state.endDate) {
+      dateAndTime = this.state.startDate.toString();
     }
 
     let form = {
       title: this.state.title,
       description: this.state.description,
-      isAllDay: true,
-      from: from,
-      to: to,
-      selectedDate: selectedDate
+      dateAndTime: dateAndTime
     };
     console.dir(form);
 
@@ -113,6 +71,25 @@ class CreateNewForm extends React.Component {
 
   render() {
     const { title, description, isAllDay } = this.state;
+
+    let start = this.state.startDate.format('DD/MM/YYYY, HH:mm');
+    let end = this.state.endDate.format('DD/MM/YYYY, HH:mm');
+    let label = start + ' - ' + end;
+    if (start === end) {
+      label = start;
+    }
+
+    let locale = {
+      format: 'DD/MM/YYYY, HH:mm',
+      separator: ' - ',
+      applyLabel: 'Apply',
+      cancelLabel: 'Cancel',
+      weekLabel: 'W',
+      customRangeLabel: 'Custom Range',
+      daysOfWeek: moment.weekdaysMin(),
+      monthNames: moment.monthsShort(),
+      firstDay: moment.localeData().firstDayOfWeek(),
+    };
 
     return (
       <div className='CreateNewForm'>
@@ -138,59 +115,34 @@ class CreateNewForm extends React.Component {
                 <Form.Check type="checkbox" id="all-day" name="isAllDay" onChange={this.handleToggle} checked={isAllDay} label="All Day Event?" />
               </Form.Group>
 
-              {
-                !this.state.isAllDay &&
-                <>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="from">From</InputGroup.Text>
-                    </InputGroup.Prepend>
-
-                    <select onChange={this.onChange} name="from">
-                      {DROPDOWN_TIMES.map((time, index) => {
-                        return <option value={60 * (index + 1)} key={index}>{time}</option>
-                      })}
-                    </select>
-                    <InputGroup.Append>
-                      <select name="fromAMPM" onChange={this.onChange}>
-                        <option>AM</option>
-                        <option>PM</option>
-                      </select>
-                    </InputGroup.Append>
-                  </InputGroup>
-
-                  <InputGroup className="mb-3">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="from">To</InputGroup.Text>
-                    </InputGroup.Prepend>
-
-                    <select onChange={this.onChange} name="to">
-                      {DROPDOWN_TIMES.map((time, index) => {
-                        return <option value={60 * (index + 1)} key={index + 64}>{time}</option>
-                      })}
-                    </select>
-                    <InputGroup.Append>
-                      <select name="toAMPM" onChange={this.onChange}>
-                        <option>AM</option>
-                        <option>PM</option>
-                      </select>
-                    </InputGroup.Append>
-                  </InputGroup>
-                </>
-              }
               <Form.Group>
                 <Form.Label>
-                  Which Day?
-            </Form.Label>
-                <InputGroup>
-                  <DatePicker
-                    selected={this.state.selectedDate}
-                    onChange={this.handleChange}
-                  />
-                </InputGroup>
+                  Date and Time
+                    </Form.Label>
+                {
+                  !this.state.isAllDay ?
+                    <DatetimeRangePicker
+                      timePicker
+                      locale={locale}
+                      startDate={this.state.startDate}
+                      endDate={this.state.endDate}
+                      onApply={this.handleApply}
+                    >
+                      <Form.Control readOnly type="plaintext" value={label} name="dateAndTime" placeholder={label} />
+                    </DatetimeRangePicker>
+                    :
+                    <InputGroup>
+                      <DatePicker
+                        selected={this.state.selectedDate}
+                        onChange={this.handleChange}
+                      />
+                    </InputGroup>
+                }
                 <hr />
               </Form.Group>
-              <Button variant="primary" disabled={this.state.title && this.state.description && this.state.selectedDate ? false : true} size="lg" onClick={this.submitForm}>
+
+
+              <Button variant="primary" disabled={this.state.title && this.state.description && label ? false : true} size="lg" onClick={this.submitForm}>
                 Submit
               </Button>
             </Col>
