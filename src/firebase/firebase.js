@@ -22,7 +22,6 @@ class Firebase {
       return this.db.ref('/forms/').push(form)
         .then(result => {
           let formId = result.key;
-          console.log(formId);
           return this.db.ref('/owners/').push({
             formId: formId
           })
@@ -33,19 +32,26 @@ class Firebase {
       return this.db.ref('/forms/' + formId).once('value');
     }
 
-    getOverviewInformation = ownerId => {
+    /**
+     * Retrieves the Sync Form associated with passed in owner ID
+     */
+    getSyncFormFromOwnerId = ownerId => {
       return this.db.ref('/owners/' + ownerId).once('value')
         .then((result) => {
-          console.log(result.val());
           if (result.val() != null) {
-            let formId = result.val().formId;
+            /* If we get a valid result, extract the correct Sync Form Id */
+            const { formId } = result.val();
+
+            /* Get the Sync Form from Firebase */
             return this.db.ref('/forms/' + formId).once('value');
-          }        
-        });
+          } else {
+            /* TODO: Handle case where the ID is invalid for whatever reason! */
+          }
+        })
     }
     
     setFirebaseForm = (formId, time) => {
-      return this.db.ref('/forms/' + formId + '/times/').push({
+      return this.db.ref('/forms/' + formId + '/selectedTimes/').push({
         time
       });
     }

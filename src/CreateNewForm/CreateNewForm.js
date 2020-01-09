@@ -9,6 +9,7 @@ import DatetimeRangePicker from 'react-bootstrap-datetimerangepicker';
 import moment from 'moment';
 import firebase from '../firebase/firebase';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
+import { parseDate } from '../utils/date';
 
 class CreateNewForm extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class CreateNewForm extends React.Component {
     this.state = {
       startDate: moment().subtract(29, 'days'),
       endDate: moment(),
+      description: "What time can we meet?",
       ranges: {
         'Today': [moment(), moment()],
         'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -25,6 +27,11 @@ class CreateNewForm extends React.Component {
         'This Month': [moment().startOf('month'), moment().endOf('month')],
         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
       },
+      isAllDay: true,
+      dateRange: {
+        startDate: new Date(),
+        endDate: new Date()
+      }
     };
   }
 
@@ -35,6 +42,7 @@ class CreateNewForm extends React.Component {
     });
   }
 
+  
   handleToggle = event => {
     console.log(event.target.checked);
     this.setState({
@@ -50,18 +58,51 @@ class CreateNewForm extends React.Component {
     });
   }
 
+  isAllDay = (locale, label) => (
+    this.state.isAllDay ? 
+    <InputGroup>
+        <DatePicker
+          id="all-day-date-picker"
+          selected={this.state.selectedDate}
+          onChange={this.allDayDatePickerChange}
+          value={parseDate(this.state.dateRange.startDate)}
+        />
+      </InputGroup> : <DatetimeRangePicker
+      timePicker
+      locale={locale}
+      startDate={this.state.startDate}
+      endDate={this.state.endDate}
+      onApply={this.handleApply}
+    >
+      <Form.Control readOnly type="plaintext" value={label} name="dateAndTime" placeholder={label} />
+    </DatetimeRangePicker>
+  )
+
+  allDayDatePickerChange = (event) => {
+    console.log(event);
+    this.setState({
+      ...this.state,
+      dateRange: {
+        startDate: new Date(event),
+        endDate: new Date(event)
+      }
+    })
+  }
+
   submitForm = async () => {
-    let dateAndTime = this.state.startDate + ' - ' + this.state.endDate;
-    if (this.state.startDate === this.state.endDate) {
-      dateAndTime = this.state.startDate.toString();
-    }
+    const { isAllDay, dateRange, title, description } = this.state;
 
     let form = {
-      title: this.state.title,
-      description: this.state.description,
-      dateAndTime: dateAndTime
-    };
-    console.dir(form);
+      dateRange: {
+        startDate: dateRange.startDate.toString(),
+        endDate: dateRange.endDate.toString()
+      },
+      timestamp: new Date().toString(),
+      times: this.createTimes(),
+      isAllDay,
+      title,
+      description
+    }
 
     firebase.addSyncFormToDatabase(form)
       .then((res) => {
@@ -69,6 +110,27 @@ class CreateNewForm extends React.Component {
       });
   }
 
+  createTimes = () => {
+    const { isAllDay, dateRange } = this.state;
+    let date = new Date(dateRange.startDate.toString());
+    if (isAllDay) {
+      /* We only have to create an map with 24 entries for one day */
+      let timeMap = {};
+
+      for (let i = 0; i < 24; i++) {
+        date.setHours(i, 0, 0, 0);
+
+        let timeEntry = {
+          time: date.toString(),
+          count: 0
+        };
+
+        timeMap[date.getHours()] = timeEntry;
+      }
+
+        return timeMap;
+    }
+  }
   render() {
     const { title, description, isAllDay } = this.state;
 
@@ -117,27 +179,9 @@ class CreateNewForm extends React.Component {
 
               <Form.Group>
                 <Form.Label>
-                  Date and Time
+                  {this.isAllDay ? "Date" : "Date and Time"}
                     </Form.Label>
-                {
-                  !this.state.isAllDay ?
-                    <DatetimeRangePicker
-                      timePicker
-                      locale={locale}
-                      startDate={this.state.startDate}
-                      endDate={this.state.endDate}
-                      onApply={this.handleApply}
-                    >
-                      <Form.Control readOnly type="plaintext" value={label} name="dateAndTime" placeholder={label} />
-                    </DatetimeRangePicker>
-                    :
-                    <InputGroup>
-                      <DatePicker
-                        selected={this.state.selectedDate}
-                        onChange={this.handleChange}
-                      />
-                    </InputGroup>
-                }
+                {this.isAllDay(locale, label)}
                 <hr />
               </Form.Group>
 
