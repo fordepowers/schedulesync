@@ -7,6 +7,7 @@ import moment from 'moment';
 class DateRangeTimePicker extends React.Component {
   constructor (props) {
     super(props);
+    this.handleApply = this.handleApply.bind(this);
     this.state = {
       startDate: moment().subtract(5, 'days'),
       endDate: moment(),
@@ -26,18 +27,20 @@ class DateRangeTimePicker extends React.Component {
       startDate: picker.startDate,
       endDate: picker.endDate
     });
+    this.props.storeStartDate(picker.startDate.format('MM/DD/YYYY'));
+    this.props.storeEndDate(picker.endDate.format('MM/DD/YYYY'));
   }
 
   render () {
-    const start = this.state.startDate.format('MM/DD/YYYY, HH:mm');
-    const end = this.state.endDate.format('MM/DD/YYYY, HH:mm');
+    const start = this.state.startDate.format('MM/DD/YYYY');
+    const end = this.state.endDate.format('MM/DD/YYYY');
     let label = start + ' - ' + end;
     if (start === end) {
       label = start;
     }
 
     const locale = {
-      format: 'MM/DD/YYYY, HH',
+      format: 'MM/DD/YYYY',
       separator: ' - ',
       applyLabel: 'Apply',
       cancelLabel: 'Cancel',
@@ -51,14 +54,13 @@ class DateRangeTimePicker extends React.Component {
     return (
       <div className='form-group'>
         <DatetimeRangePicker
-          timePicker
           showDropdowns
           locale={locale}
           startDate={this.state.startDate}
           endDate={this.state.endDate}
-          onApply={this.props.handleApply}
+          onApply={this.handleApply}
         >
-          <Form.Control type='plaintext' value={label} name='DateRangeTimePicker' placeholder={label} />
+          <Form.Control type='plaintext' onChange={() => { }} value={label} name='DateRangeTimePicker' placeholder={label} />
         </DatetimeRangePicker>
       </div>
     );

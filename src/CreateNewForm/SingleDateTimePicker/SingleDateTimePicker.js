@@ -25,6 +25,7 @@ class SingleDateTimePicker extends React.Component {
     this.setState({
       startDate: picker.startDate
     });
+    this.props.storeStartDate(picker.startDate.format('MM/DD/YYYY'));
   }
 
   render () {
@@ -51,7 +52,7 @@ class SingleDateTimePicker extends React.Component {
           startDate={this.state.startDate}
           onApply={this.handleApply}
         >
-          <Form.Control type='plaintext' value={label} name='SingleDateTimePicker' placeholder={label} />
+          <Form.Control type='plaintext' onChange={() => { }} value={label} name='SingleDateTimePicker' placeholder={label} />
         </DatetimeRangePicker>
       </div>
     );

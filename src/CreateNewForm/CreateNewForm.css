@@ -1,5 +1,5 @@
-#all-day-date-picker {
-  padding: 8px;
-  width: 300px; 
-    /* text-align: center; */
+.react-time-picker .react-time-picker__wrapper {
+  border: 1px solid lightgray;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
 }
