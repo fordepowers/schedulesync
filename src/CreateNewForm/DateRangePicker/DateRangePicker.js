@@ -4,12 +4,13 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 import { Form } from 'react-bootstrap';
 import moment from 'moment';
 
-class SingleDateTimePicker extends React.Component {
+class DateRangePicker extends React.Component {
   constructor (props) {
     super(props);
     this.handleApply = this.handleApply.bind(this);
     this.state = {
-      startDate: moment(),
+      startDate: moment().subtract(5, 'days'),
+      endDate: moment(),
       ranges: {
         Today: [moment(), moment()],
         Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -23,13 +24,20 @@ class SingleDateTimePicker extends React.Component {
 
   handleApply (event, picker) {
     this.setState({
-      startDate: picker.startDate
+      startDate: picker.startDate,
+      endDate: picker.endDate
     });
     this.props.storeStartDate(picker.startDate.format('MM/DD/YYYY'));
+    this.props.storeEndDate(picker.endDate.format('MM/DD/YYYY'));
   }
 
   render () {
-    const label = this.state.startDate.format('MM/DD/YYYY');
+    const start = this.state.startDate.format('MM/DD/YYYY');
+    const end = this.state.endDate.format('MM/DD/YYYY');
+    let label = start + ' - ' + end;
+    if (start === end) {
+      label = start;
+    }
 
     const locale = {
       format: 'MM/DD/YYYY',
@@ -46,17 +54,17 @@ class SingleDateTimePicker extends React.Component {
     return (
       <div className='form-group'>
         <DatetimeRangePicker
-          singleDatePicker
           showDropdowns
           locale={locale}
           startDate={this.state.startDate}
+          endDate={this.state.endDate}
           onApply={this.handleApply}
         >
-          <Form.Control type='plaintext' onChange={() => { }} value={label} name='SingleDateTimePicker' placeholder={label} />
+          <Form.Control type='plaintext' onChange={() => { }} value={label} name='DateRangePicker' placeholder={label} />
         </DatetimeRangePicker>
       </div>
     );
   }
 }
 
-export default SingleDateTimePicker;
+export default DateRangePicker;

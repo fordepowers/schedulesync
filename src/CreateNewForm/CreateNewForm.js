@@ -1,8 +1,8 @@
 import React from 'react';
 import './CreateNewForm.css';
 import { Button, Form, Col, Row } from 'react-bootstrap';
-import DateRangeTimePicker from "./DateRangeTimePicker/DateRangeTimePicker";
-import SingleDateTimePicker from "./SingleDateTimePicker/SingleDateTimePicker";
+import DateRangePicker from "./DateRangePicker/DateRangePicker";
+import SingleDatePicker from "./SingleDatePicker/SingleDatePicker";
 import TimePicker from 'react-time-picker';
 import firebase from '../firebase/firebase';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
@@ -112,7 +112,7 @@ class CreateNewForm extends React.Component {
                 <Form.Label>
                   {this.state.singleDayEvent ? "Date" : "Dates"}
                 </Form.Label>
-                {this.state.singleDayEvent ? <SingleDateTimePicker storeStartDate={this.storeStartDate} /> : <DateRangeTimePicker storeStartDate={this.storeStartDate} storeEndDate={this.storeEndDate} />}
+                {this.state.singleDayEvent ? <SingleDatePicker storeStartDate={this.storeStartDate} /> : <DateRangePicker storeStartDate={this.storeStartDate} storeEndDate={this.storeEndDate} />}
                 <Form.Group>
                   <Form.Check type="checkbox" id="all-day" name="singleDayEvent" onChange={this.handleToggle} checked={singleDayEvent} label="Single Day Event" />
                 </Form.Group>

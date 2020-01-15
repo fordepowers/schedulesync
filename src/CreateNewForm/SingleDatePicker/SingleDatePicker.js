@@ -4,13 +4,12 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 import { Form } from 'react-bootstrap';
 import moment from 'moment';
 
-class DateRangeTimePicker extends React.Component {
+class SingleDatePicker extends React.Component {
   constructor (props) {
     super(props);
     this.handleApply = this.handleApply.bind(this);
     this.state = {
-      startDate: moment().subtract(5, 'days'),
-      endDate: moment(),
+      startDate: moment(),
       ranges: {
         Today: [moment(), moment()],
         Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -24,20 +23,13 @@ class DateRangeTimePicker extends React.Component {
 
   handleApply (event, picker) {
     this.setState({
-      startDate: picker.startDate,
-      endDate: picker.endDate
+      startDate: picker.startDate
     });
     this.props.storeStartDate(picker.startDate.format('MM/DD/YYYY'));
-    this.props.storeEndDate(picker.endDate.format('MM/DD/YYYY'));
   }
 
   render () {
-    const start = this.state.startDate.format('MM/DD/YYYY');
-    const end = this.state.endDate.format('MM/DD/YYYY');
-    let label = start + ' - ' + end;
-    if (start === end) {
-      label = start;
-    }
+    const label = this.state.startDate.format('MM/DD/YYYY');
 
     const locale = {
       format: 'MM/DD/YYYY',
@@ -54,17 +46,17 @@ class DateRangeTimePicker extends React.Component {
     return (
       <div className='form-group'>
         <DatetimeRangePicker
+          singleDatePicker
           showDropdowns
           locale={locale}
           startDate={this.state.startDate}
-          endDate={this.state.endDate}
           onApply={this.handleApply}
         >
-          <Form.Control type='plaintext' onChange={() => { }} value={label} name='DateRangeTimePicker' placeholder={label} />
+          <Form.Control type='plaintext' onChange={() => { }} value={label} name='SingleDatePicker' placeholder={label} />
         </DatetimeRangePicker>
       </div>
     );
   }
 }
 
-export default DateRangeTimePicker;
+export default SingleDatePicker;
