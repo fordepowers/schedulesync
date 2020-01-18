@@ -46,9 +46,9 @@ class SyncOverview extends React.Component {
       }
     });
 
-    const { isAllDay } = this.state;
+    const { singleDayEvent } = this.state;
 
-    if (isAllDay) {
+    if (singleDayEvent) {
       this.handleAllDayForm()
     } else {
       console.log("Not implemented!");

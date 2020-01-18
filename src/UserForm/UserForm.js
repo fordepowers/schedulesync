@@ -3,7 +3,6 @@ import './UserForm.css';
 import firebase from '../firebase/firebase';
 import { Form, Col, Alert, Table, Button } from 'react-bootstrap';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
-import { parseTableTime } from "../utils/date";
 
 export default class UserForm extends React.Component {
   constructor(props) {
@@ -29,7 +28,7 @@ export default class UserForm extends React.Component {
   }
 
   createTable = () => {
-    const { dateRange, isAllDay, times } = this.state;
+    const { dateRange, singleDayEvent, times } = this.state;
 
     if (dateRange == undefined) {
       return;
@@ -37,10 +36,10 @@ export default class UserForm extends React.Component {
 
     // let startDate = new Date(dateRange.startDate);
 
-    if (isAllDay) {
+    if (singleDayEvent) {
       return Object.keys(times).map(key => (
         <tr key={new Date(times[key].time)} className='time'>
-          <td>{parseTableTime(new Date(times[key].time))}</td>
+          {/* <td>{parseTableTime(new Date(times[key].time))}</td> */}
           <td cellid={Math.random()} className="table-cell" id={key} onClick={this.handleOnCellClick}>Select</td>
         </tr>
       ));
