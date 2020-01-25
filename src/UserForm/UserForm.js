@@ -39,6 +39,16 @@ export default class UserForm extends React.Component {
   changeFromTime = (userFromTime) => this.setState({ userFromTime })
   changeToTime = (userToTime) => this.setState({ userToTime })
 
+  convertTimeToLabel = (time) => {
+    time = time.replace(":", ".");
+    time = parseFloat(time);
+    let suffix = time >= 12 ? " PM" : " AM";
+    time = ((time + 11) % 12 + 1)
+    time = time.toString().split(".");
+    time = time[0].slice(0, 2) + ":" + time[1].slice(0, 2) + suffix
+    return time;
+  }
+
 
   onSubmit = () => {
     const { name, formId } = this.state;
@@ -61,8 +71,13 @@ export default class UserForm extends React.Component {
   render() {
     const { name, dateRange } = this.state;
     let startDateObject;
+    let fromTime;
+    let toTime;
+
     if (dateRange) {
       startDateObject = new Date(dateRange.startDate);
+      fromTime = this.convertTimeToLabel(dateRange.fromTime);
+      toTime = this.convertTimeToLabel(dateRange.toTime);
     }
     console.dir(this.state);
 
@@ -86,6 +101,7 @@ export default class UserForm extends React.Component {
               </Form.Group>
 
               <p style={{ textAlign: 'center' }}>{startDateObject ? startDateObject.toDateString() : null}</p>
+              <h6 style={{ textAlign: 'center' }}>{fromTime ? fromTime : null} - {toTime ? toTime : null}</h6>
               <hr />
               <Form.Group as={Row} controlId="formHorizontalFrom">
                 <Form.Label column sm={2}>From</Form.Label>
