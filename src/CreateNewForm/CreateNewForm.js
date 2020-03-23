@@ -1,6 +1,6 @@
 import React from 'react';
 import './CreateNewForm.css';
-import { Button, Form, Col, Row } from 'react-bootstrap';
+import { Button, Form, Col, Row, Tabs, Tab } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'react-time-picker';
@@ -95,6 +95,36 @@ class CreateNewForm extends React.Component {
                 <Form.Control onChange={this.onChange} value={description} name="description" placeholder="'What day and time can you meet?'" />
               </Form.Group>
 
+              <Tabs defaultActiveKey="date" id="date-choice-tab">
+                <Tab eventKey="date" title="Specific Date">
+                  <br />
+                  <Form.Group>
+                    <Form.Label>
+                      {this.state.singleDayEvent ? "Date" : "Dates"}
+                    </Form.Label>
+                    <br />
+                    <DatePicker selected={this.state.startDate} onChange={this.storeStartDate} />
+                    <Form.Group>
+                      <Form.Check type="checkbox" id="all-day" name="singleDayEvent" onChange={this.handleToggle} checked={singleDayEvent} label="Single Day Event" />
+                    </Form.Group>
+                  </Form.Group>
+                </Tab>
+                <Tab eventKey="weekdays" title="Days of the Week">
+                  <br />
+                  <Form.Group>
+                    <Form.Label>
+                      {this.state.singleDayEvent ? "Date" : "Dates"}
+                    </Form.Label>
+                    <br />
+                    <DatePicker selected={this.state.startDate} onChange={this.storeStartDate} />
+                    <Form.Group>
+                      <Form.Check type="checkbox" id="all-day" name="singleDayEvent" onChange={this.handleToggle} checked={singleDayEvent} label="Single Day Event" />
+                    </Form.Group>
+                  </Form.Group>
+                </Tab>
+              </Tabs>
+
+              <hr />
 
               <Form.Group as={Row} controlId="formHorizontalFrom">
                 <Form.Label column sm={2}>From</Form.Label>
@@ -105,20 +135,6 @@ class CreateNewForm extends React.Component {
                 <Col sm={10}>
                   <TimePicker onChange={this.changeToTime} value={this.state.toTime} disableClock maxDetail="minute" />
                 </Col>
-              </Form.Group>
-
-
-              <Form.Group>
-                <Form.Label>
-                  {this.state.singleDayEvent ? "Date" : "Dates"}
-                </Form.Label>
-                <br />
-                <DatePicker selected={this.state.startDate} onChange={this.storeStartDate} />
-                <Form.Group>
-                  <br />
-                  <Form.Check type="checkbox" id="all-day" name="singleDayEvent" onChange={this.handleToggle} checked={singleDayEvent} label="Single Day Event" />
-                </Form.Group>
-                <hr />
               </Form.Group>
 
 
