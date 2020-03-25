@@ -4,6 +4,7 @@ import { Button, Form, Col, Row, Tabs, Tab } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'react-time-picker';
+import Switch from "react-switch";
 import firebase from '../firebase/firebase';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
 
@@ -24,6 +25,26 @@ class CreateNewForm extends React.Component {
     });
   }
 
+  handleWeekdayClick = (event) => {
+    let Weekday = [event.target.attributes[1].value];
+
+    if (this.state[Weekday]) {
+      this.setState({
+        ...this.state,
+        [event.target.attributes[1].value]: false
+      });
+      console.log(event.target.attributes[1].value + " False");
+      event.target.className = 'DayPicker-Weekday';
+    } else if (!this.state[Weekday]) {
+      this.setState({
+        ...this.state,
+        [event.target.attributes[1].value]: true
+      });
+      console.log(event.target.attributes[1].value + " True");
+      event.target.className = 'DayPicker-Weekday Selected';
+    }
+  }
+
   storeStartDate = (startDate) => {
     this.setState({
       ...this.state,
@@ -41,10 +62,10 @@ class CreateNewForm extends React.Component {
   changeFromTime = (fromTime) => this.setState({ fromTime })
   changeToTime = (toTime) => this.setState({ toTime })
 
-  handleToggle = event => {
+  handleToggle = (event) => {
     this.setState({
       ...this.state,
-      singleDayEvent: event.target.checked
+      singleDayEvent: event
     });
   }
 
@@ -79,8 +100,7 @@ class CreateNewForm extends React.Component {
         <Form>
           <Col>
             <Col>
-              <Form.Group>
-              </Form.Group>
+              <Form.Group></Form.Group>
               <Form.Group>
                 <Form.Label>
                   Event Title
@@ -96,35 +116,50 @@ class CreateNewForm extends React.Component {
               </Form.Group>
 
               <Tabs defaultActiveKey="date" id="date-choice-tab">
-                <Tab eventKey="date" title="Specific Date">
-                  <br />
+                <Tab eventKey="date" title="Specific Date(s)">
+                  <Form.Group></Form.Group>
+                  <Form.Group>
+                    <span>Single Day</span>
+                    <br />
+                    <Switch onChange={this.handleToggle} className='toggle-button' checked={singleDayEvent} uncheckedIcon={false} checkedIcon={false} onColor='#2072B8' />
+                  </Form.Group>
                   <Form.Group>
                     <Form.Label>
-                      {this.state.singleDayEvent ? "Date" : "Dates"}
+                      {singleDayEvent ? "Date" : "Start Date"}
                     </Form.Label>
                     <br />
                     <DatePicker selected={this.state.startDate} onChange={this.storeStartDate} />
-                    <Form.Group>
-                      <Form.Check type="checkbox" id="all-day" name="singleDayEvent" onChange={this.handleToggle} checked={singleDayEvent} label="Single Day Event" />
-                    </Form.Group>
+                    <br />
+                    {singleDayEvent ? null :
+                      <div>
+                        <br />
+                        <Form.Label>End Date</Form.Label>
+                        <br />
+                        <DatePicker selected={this.state.endDate} onChange={this.storeEndDate} />
+                      </div>
+                    }
                   </Form.Group>
+
                 </Tab>
                 <Tab eventKey="weekdays" title="Days of the Week">
                   <br />
                   <Form.Group>
                     <Form.Label>
-                      {this.state.singleDayEvent ? "Date" : "Dates"}
+                      Days
                     </Form.Label>
                     <br />
-                    <DatePicker selected={this.state.startDate} onChange={this.storeStartDate} />
-                    <Form.Group>
-                      <Form.Check type="checkbox" id="all-day" name="singleDayEvent" onChange={this.handleToggle} checked={singleDayEvent} label="Single Day Event" />
-                    </Form.Group>
+                    <div className='DayPicker-Weekdays'>
+                      <div className='DayPicker-Weekday' value='Sunday' onClick={this.handleWeekdayClick}>Su</div>
+                      <div className='DayPicker-Weekday' value='Monday' onClick={this.handleWeekdayClick}>Mo</div>
+                      <div className='DayPicker-Weekday' value='Tuesday' onClick={this.handleWeekdayClick}>Tu</div>
+                      <div className='DayPicker-Weekday' value='Wednesday' onClick={this.handleWeekdayClick}>We</div>
+                      <div className='DayPicker-Weekday' value='Thursday' onClick={this.handleWeekdayClick}>Th</div>
+                      <div className='DayPicker-Weekday' value='Friday' onClick={this.handleWeekdayClick}>Fr</div>
+                      <div className='DayPicker-Weekday' value='Saturday' onClick={this.handleWeekdayClick}>Sa</div>
+                    </div>
                   </Form.Group>
                 </Tab>
               </Tabs>
-
-              <hr />
 
               <Form.Group as={Row} controlId="formHorizontalFrom">
                 <Form.Label column sm={2}>From</Form.Label>
@@ -137,6 +172,7 @@ class CreateNewForm extends React.Component {
                 </Col>
               </Form.Group>
 
+              <hr />
 
               <Button variant="primary" disabled={this.state.title && this.state.description && this.state.fromTime && this.state.toTime && this.state.startDate ? false : true} size="lg" onClick={this.submitForm}>
                 Submit

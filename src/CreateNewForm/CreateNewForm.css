@@ -5,10 +5,7 @@
   height: calc(1.5em + 0.75rem + 2px);
 }
 
-input.react-time-picker__inputGroup__input, 
-.react-time-picker__inputGroup__divider, 
-.react-time-picker__inputGroup__leadingZero,
-select.react-time-picker__inputGroup__input {
+input.react-time-picker__inputGroup__input, .react-time-picker__inputGroup__divider, .react-time-picker__inputGroup__leadingZero, select.react-time-picker__inputGroup__input {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -24,4 +21,31 @@ select.react-time-picker__inputGroup__input {
   font-weight: 400;
   line-height: 1.5;
   color: #495057;
+}
+
+div.toggle-button {
+  margin-top: 0.5rem;
+}
+
+div.DayPicker-Weekday {
+  display: inline-block;
+  text-align: center;
+  background-color: white;
+  color: #2072B8;
+  border-radius: 15px;
+  width: 38px;
+  border: 1.5px solid #2072B8;
+  margin: 0.2rem;
+  font-family: Verdana, sans-serif;
+  vertical-align: middle;
+}
+
+div.DayPicker-Weekday.Selected {
+  background-color: #2072B8;
+  color: white;
+}
+
+div.DayPicker-Weekday:hover {
+  background-color: #2072B8;
+  color: white;
 }
