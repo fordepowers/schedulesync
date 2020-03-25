@@ -38,6 +38,7 @@ div.DayPicker-Weekday {
   margin: 0.2rem;
   font-family: Verdana, sans-serif;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 div.DayPicker-Weekday.Selected {
