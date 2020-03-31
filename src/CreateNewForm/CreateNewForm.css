@@ -31,22 +31,28 @@ div.DayPicker-Weekday {
   display: inline-block;
   text-align: center;
   background-color: white;
-  color: #2072B8;
+  color: #007bff;
   border-radius: 15px;
   width: 38px;
-  border: 1.5px solid #2072B8;
+  border: 1.5px solid #007bff;
   margin: 0.2rem;
   font-family: Verdana, sans-serif;
   vertical-align: middle;
   cursor: pointer;
 }
 
-div.DayPicker-Weekday.Selected {
-  background-color: #2072B8;
+div.DayPicker-Weekday:hover {
+  background-color: #007bff;
   color: white;
 }
 
-div.DayPicker-Weekday:hover {
-  background-color: #2072B8;
+div.DayPicker-Weekday.Selected {
+  background-color: #007bff;
   color: white;
+}
+
+div.DayPicker-Weekday.Selected:hover {
+  background-color: #0069d9;
+  color: white;
+  border-color: #0062cc;
 }

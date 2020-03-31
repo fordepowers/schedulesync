@@ -31,16 +31,18 @@ class CreateNewForm extends React.Component {
     if (this.state[Weekday]) {
       this.setState({
         ...this.state,
-        [event.target.attributes[1].value]: false
+        [event.target.attributes[1].value]: false,
+        startDate: null,
+        endDate: null
       });
-      console.log(event.target.attributes[1].value + " False");
       event.target.className = 'DayPicker-Weekday';
     } else if (!this.state[Weekday]) {
       this.setState({
         ...this.state,
-        [event.target.attributes[1].value]: true
+        [event.target.attributes[1].value]: true,
+        startDate: null,
+        endDate: null
       });
-      console.log(event.target.attributes[1].value + " True");
       event.target.className = 'DayPicker-Weekday Selected';
     }
   }
@@ -67,15 +69,47 @@ class CreateNewForm extends React.Component {
       ...this.state,
       singleDayEvent: event
     });
-  }
+  };
+
+  isButtonDisabled() {
+    let state = this.state;
+    let weekdayIsSelected = (state.Sunday || state.Monday || state.Tuesday || state.Wednesday || state.Thursday || state.Friday || state.Saturday)
+    if (state.title && state.description && state.fromTime && state.toTime && (state.startDate || weekdayIsSelected)) {
+      return false; // False because the button is not disabled
+    } else {
+      return true; // True because button is disabled
+    }
+  };
 
   submitForm = async () => {
-    const { singleDayEvent, startDate, endDate, fromTime, toTime, title, description } = this.state;
+    const { singleDayEvent,
+      startDate,
+      endDate,
+      fromTime,
+      toTime,
+      title,
+      description,
+      Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+    } = this.state;
+    let weekdayIsSelected = (Sunday || Monday || Tuesday || Wednesday || Thursday || Friday || Saturday)
+    let weekdaySelected;
+    if (weekdayIsSelected) {
+      weekdaySelected = {
+        Sunday: Sunday,
+        Monday: Monday,
+        Tuesday: Tuesday,
+        Wednesday: Wednesday,
+        Thursday: Thursday,
+        Friday: Friday,
+        Saturday: Saturday,
+      };
+    };
 
     let form = {
       dateRange: {
-        startDate: startDate.toString(),
+        startDate: weekdayIsSelected ? null : startDate.toString(),
         endDate: endDate ? endDate.toString() : null,
+        weekdays: weekdayIsSelected ? weekdaySelected : null,
         fromTime: fromTime,
         toTime: toTime,
       },
@@ -121,7 +155,7 @@ class CreateNewForm extends React.Component {
                   <Form.Group>
                     <span>Single Day</span>
                     <br />
-                    <Switch onChange={this.handleToggle} className='toggle-button' checked={singleDayEvent} uncheckedIcon={false} checkedIcon={false} onColor='#2072B8' />
+                    <Switch onChange={this.handleToggle} className='toggle-button' checked={singleDayEvent} uncheckedIcon={false} checkedIcon={false} onColor='#007bff' />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>
@@ -174,9 +208,10 @@ class CreateNewForm extends React.Component {
 
               <hr />
 
-              <Button variant="primary" disabled={this.state.title && this.state.description && this.state.fromTime && this.state.toTime && this.state.startDate ? false : true} size="lg" onClick={this.submitForm}>
+              <Button variant="primary" block disabled={this.isButtonDisabled()} size='lg' onClick={this.submitForm}>
                 Submit
               </Button>
+              <br />
             </Col>
           </Col>
         </Form>
