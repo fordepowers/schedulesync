@@ -26,12 +26,12 @@ class CreateNewForm extends React.Component {
   }
 
   handleWeekdayClick = (event) => {
-    let Weekday = [event.target.attributes[1].value];
+    let Weekday = event.target.id;
 
     if (this.state[Weekday]) {
       this.setState({
         ...this.state,
-        [event.target.attributes[1].value]: false,
+        [event.target.id]: false,
         startDate: null,
         endDate: null
       });
@@ -39,7 +39,7 @@ class CreateNewForm extends React.Component {
     } else if (!this.state[Weekday]) {
       this.setState({
         ...this.state,
-        [event.target.attributes[1].value]: true,
+        [event.target.id]: true,
         startDate: null,
         endDate: null
       });
@@ -47,11 +47,21 @@ class CreateNewForm extends React.Component {
     }
   }
 
+  resetWeekdays() {
+    let weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    weekdays.forEach(weekday => {
+      this.setState({ [weekday]: null });
+      let div = document.getElementById(weekday);
+      div.className = "DayPicker-Weekday";
+    });
+  }
+
   storeStartDate = (startDate) => {
     this.setState({
       ...this.state,
       startDate: startDate
     });
+    this.resetWeekdays();
   }
 
   storeEndDate = (endDate) => {
@@ -59,6 +69,7 @@ class CreateNewForm extends React.Component {
       ...this.state,
       endDate: endDate
     });
+    this.resetWeekdays();
   }
 
   changeFromTime = (fromTime) => this.setState({ fromTime })
@@ -92,29 +103,29 @@ class CreateNewForm extends React.Component {
       Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
     } = this.state;
     let weekdayIsSelected = (Sunday || Monday || Tuesday || Wednesday || Thursday || Friday || Saturday)
-    let weekdaySelected;
+    let weekdaysSelected;
     if (weekdayIsSelected) {
-      weekdaySelected = {
-        Sunday: Sunday,
-        Monday: Monday,
-        Tuesday: Tuesday,
-        Wednesday: Wednesday,
-        Thursday: Thursday,
-        Friday: Friday,
-        Saturday: Saturday,
+      weekdaysSelected = {
+        Sunday: Sunday ? Sunday : null,
+        Monday: Monday ? Monday : null,
+        Tuesday: Tuesday ? Tuesday : null,
+        Wednesday: Wednesday ? Wednesday : null,
+        Thursday: Thursday ? Thursday : null,
+        Friday: Friday ? Friday : null,
+        Saturday: Saturday ? Saturday : null,
       };
     };
 
     let form = {
       dateRange: {
-        startDate: weekdayIsSelected ? null : startDate.toString(),
+        startDate: startDate ? startDate.toString() : null,
         endDate: endDate ? endDate.toString() : null,
-        weekdays: weekdayIsSelected ? weekdaySelected : null,
+        weekdays: weekdayIsSelected ? weekdaysSelected : null,
         fromTime: fromTime,
         toTime: toTime,
       },
       timestamp: new Date().toString(),
-      singleDayEvent,
+      singleDayEvent: !weekdayIsSelected ? singleDayEvent : null,
       title,
       description
     }
@@ -127,7 +138,6 @@ class CreateNewForm extends React.Component {
 
   render() {
     const { title, description, singleDayEvent } = this.state;
-
     return (
       <div className='CreateNewForm'>
         <NavbarCustom Text='Home' Route='/' />
@@ -183,13 +193,13 @@ class CreateNewForm extends React.Component {
                     </Form.Label>
                     <br />
                     <div className='DayPicker-Weekdays'>
-                      <div className='DayPicker-Weekday' value='Sunday' onClick={this.handleWeekdayClick}>Su</div>
-                      <div className='DayPicker-Weekday' value='Monday' onClick={this.handleWeekdayClick}>Mo</div>
-                      <div className='DayPicker-Weekday' value='Tuesday' onClick={this.handleWeekdayClick}>Tu</div>
-                      <div className='DayPicker-Weekday' value='Wednesday' onClick={this.handleWeekdayClick}>We</div>
-                      <div className='DayPicker-Weekday' value='Thursday' onClick={this.handleWeekdayClick}>Th</div>
-                      <div className='DayPicker-Weekday' value='Friday' onClick={this.handleWeekdayClick}>Fr</div>
-                      <div className='DayPicker-Weekday' value='Saturday' onClick={this.handleWeekdayClick}>Sa</div>
+                      <div id="Sunday" className='DayPicker-Weekday' onClick={this.handleWeekdayClick}>Su</div>
+                      <div id="Monday" className='DayPicker-Weekday' onClick={this.handleWeekdayClick}>Mo</div>
+                      <div id="Tuesday" className='DayPicker-Weekday' onClick={this.handleWeekdayClick}>Tu</div>
+                      <div id="Wednesday" className='DayPicker-Weekday' onClick={this.handleWeekdayClick}>We</div>
+                      <div id="Thursday" className='DayPicker-Weekday' onClick={this.handleWeekdayClick}>Th</div>
+                      <div id="Friday" className='DayPicker-Weekday' onClick={this.handleWeekdayClick}>Fr</div>
+                      <div id="Saturday" className='DayPicker-Weekday' onClick={this.handleWeekdayClick}>Sa</div>
                     </div>
                   </Form.Group>
                 </Tab>
