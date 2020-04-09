@@ -7,17 +7,30 @@ import { Chart } from '@bit/primefaces.primereact.chart';
 class SyncResults extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-    };
-    console.log('THiS IS EVENT TITLE: ' + this.state.eventTitle);
+    this.state = {};
+  }
+
+  displayWeekdayLabel (weekdays) {
+    let weekdayLabel = '';
+    for (const [key, value] of Object.entries(weekdays)) {
+      if (value === true) {
+        weekdayLabel = weekdayLabel + `${key}, `;
+      }
+    }
+    return weekdayLabel.slice(0, -1).slice(0, -1) + '.';
   }
 
   render () {
+    let weekdayLabel;
+    if (this.props.data.dateRange.weekdays) {
+      weekdayLabel = this.displayWeekdayLabel(this.props.data.dateRange.weekdays);
+    }
+
     return (
       <div>
         <div className='content-section implementation'>
           <Alert variant='light'>
-            <Alert.Heading>{this.props.data.eventTitle}</Alert.Heading>
+            <Alert.Heading>{this.props.data.title}</Alert.Heading>
             <hr />
             {this.props.data.datasets[0].data === undefined
               ? <div id='loadingSpinny'>
@@ -26,7 +39,7 @@ class SyncResults extends React.Component {
                 </Spinner> <p>Waiting for entries...</p>
               </div>
               : <div>
-                <h5>Time Free for {this.props.data.eventDate}</h5>
+                <h5>Time Free for: {weekdayLabel || this.props.data.dateRange.startDate}</h5>
                 <Chart type='horizontalBar' data={this.props.data} />
               </div>}
             <hr />

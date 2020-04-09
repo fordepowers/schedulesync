@@ -37,7 +37,7 @@ class SyncOverview extends React.Component {
      */
 
     /* Save a reference to the Sync Form from Firebase */
-    let formRef =  firebase.getFormRef(this.state.key).child('/');
+    let formRef = firebase.getFormRef(this.state.key).child('/');
 
     /* Initializes the event listener */
     let eventListener = formRef.on('value', (snapshot) => {
@@ -57,60 +57,13 @@ class SyncOverview extends React.Component {
 
 
   handleAllDayForm = () => {
-    const { startDate } = this.state.dateRange;
+    const { startDate } = this.state.dateRange.startDate;
     let date = new Date(startDate);
     let times = [];
 
     for (let i = 0; i < 24; i++) {
       times.push(date.getHours());
       date.setHours(date.getHours() + 1);
-    }
-  }
-
-  render() {
-    return <h1>Under Construction</h1>
-  }
-  componentDidMount() {
-    const { ownerId } = this.props.match.params;
-    let formRef;
-    if (ownerId && ownerId !== '') {
-      firebase.getOverviewInformation(ownerId)
-        .then((result) => {
-          if (result) {
-            this.setState({
-              ...result.val(),
-              key: result.key
-            });
-          }
-
-          formRef = firebase.getFormRef(this.state.key).child('/');
-
-          let ev = formRef.on('value', (snapshot) => {
-            if (!snapshot.val()) {
-              return;
-            }
-            let myData = this.calculateTimes(snapshot.val(), this.state.from, this.state.to);
-            this.setState({
-              ...this.state,
-              data: myData,
-              rawData: snapshot.val()
-            })
-          })
-
-          firebase.getTimesForForm(this.state.key)
-            .then(res => {
-              if (!res.val()) {
-                return;
-              }
-
-              let data = this.calculateTimes(res.val(), this.state.from, this.state.to);
-              this.setState({
-                ...this.state,
-                data: data,
-                rawData: res.val()
-              });
-            })
-        });
     }
   }
 
@@ -136,84 +89,20 @@ class SyncOverview extends React.Component {
     return calculation;
   }
 
-
-  convertMinutesToString(minutes) {
-    let minutesInt = Number(minutes);
-    let qualifier = 'AM';
-    if (minutesInt >= 720) {
-      minutesInt = minutesInt - 720;
-      qualifier = 'PM';
-    }
-    switch (minutesInt) {
-      case 0:
-        return '12:00' + qualifier;
-      case 60:
-        return '1:00' + qualifier;
-      case 120:
-        return '2:00' + qualifier;
-      case 180:
-        return '3:00' + qualifier;
-      case 240:
-        return '4:00' + qualifier;
-      case 300:
-        return '5:00' + qualifier;
-      case 360:
-        return '6:00' + qualifier;
-      case 420:
-        return '7:00' + qualifier;
-      case 480:
-        return '8:00' + qualifier;
-      case 540:
-        return '9:00' + qualifier;
-      case 600:
-        return '10:00' + qualifier;
-      case 660:
-        return '11:00' + qualifier;
-      case 720:
-        return '12:00' + qualifier;
-    }
-  }
-
-  createLabels = (from, to) => {
-    let array = [];
-
-    let start = from / 60;
-    let index = to / 60;
-    index = index - start;
-
-    for (let i = 0; i <= index; i++) {
-      let time = from + (i * 60);
-      array.push(this.convertMinutesToString(time));
-    }
-
-    return array;
-  }
-
-  checkHighestNumber = (labels, data) => {
-    if (!data) {
-      return;
-    }
-    var max = data[0];
-    var maxIndex = 0;
-    for (var i = 1; i < data.length; i++) {
-      if (data[i] > max) {
-        maxIndex = i;
-        max = data[i];
-      }
-    }
-
-    return labels[maxIndex];
-  }
-
   render() {
-    const labels = this.createLabels(this.state.from, this.state.to);
-    const recommendedTime = this.checkHighestNumber(labels, this.state.data);
+    const { dateRange } = this.state
     const data = {
-      rawData: this.state.rawData,
-      eventDate: new Date(this.state.selectedDate).toDateString(),
-      eventTitle: this.state.title,
-      recommendedTime: recommendedTime,
-      labels: labels,
+      dateRange: {
+        fromTime: dateRange ? dateRange.fromTime : null,
+        startDate: dateRange ? dateRange.startDate : null,
+        toTime: dateRange ? dateRange.toTime : null,
+        endDate: dateRange ? dateRange.endDate : null,
+        weekdays: dateRange? dateRange.weekdays : null
+      },
+      description: this.state.description,
+      singleDayEvent: this.state.singleDayEvent,
+      timestamp: this.state.timestamp,
+      title: this.state.title,
       datasets: [
         {
           label: '# of people free',
@@ -227,7 +116,9 @@ class SyncOverview extends React.Component {
     const index = userFormURL.indexOf('/overview/');
     userFormURL = userFormURL.slice(0, index);
     userFormURL = userFormURL + '/user-form/' + this.state.key;
-    
+
+    console.log(this.state);
+
     return (
       <div>
         <NavbarCustom Text='Home' Route='/' />
@@ -258,9 +149,6 @@ class SyncOverview extends React.Component {
           <a target='_blank' rel='noopener noreferrer' href={userFormURL}><b>{userFormURL}</b></a>
           <hr />
           <div id='qrcode'><QRCode value={userFormURL} bgColor='#e2e3e5' /></div>
-          <br />
-          <br />
-          <br />
         </Alert>
       </div>
     );
