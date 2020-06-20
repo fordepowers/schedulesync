@@ -40,15 +40,21 @@ export default class UserForm extends React.Component {
   changeToTime = (userToTime) => this.setState({ userToTime })
 
   convertTimeToLabel = (time) => {
-    time = time.replace(":", ".");
-    time = parseFloat(time);
-    let suffix = time >= 12 ? " PM" : " AM";
-    time = ((time + 11) % 12 + 1)
-    time = time.toString().split(".");
-    time = time[0].slice(0, 2) + ":" + time[1].slice(0, 2) + suffix
+    time = time.toString();
+    let time1 = parseFloat(time.slice(0, 2));
+    let time2 = time.slice(3, 5);
+    let suffix = time1 >= 12 ? " PM" : " AM";
+    time1 = ((time1 + 11) % 12 + 1)
+    time = time1 + ":" + time2 + suffix
     return time;
   }
 
+  convertDateToLabel = (date) => {
+    date = date.toString().slice(0, 15);
+    date = date.split(" ");
+    date = date[0] + ', ' + date[1] + ' ' + date[2] + ', ' + date[3];
+    return date;
+  }
 
   onSubmit = () => {
     const { name, formId } = this.state;
@@ -73,9 +79,11 @@ export default class UserForm extends React.Component {
     let startDateObject;
     let fromTime;
     let toTime;
+    let dateDisplayLabel;
 
     if (dateRange) {
       startDateObject = new Date(dateRange.startDate);
+      dateDisplayLabel = this.convertDateToLabel(dateRange.startDate);
       fromTime = this.convertTimeToLabel(dateRange.fromTime);
       toTime = this.convertTimeToLabel(dateRange.toTime);
     }
@@ -100,7 +108,7 @@ export default class UserForm extends React.Component {
                 <Form.Control type="plaintext" onChange={this.onChange} name="name" placeholder="Please enter your name" value={name} />
               </Form.Group>
 
-              <p style={{ textAlign: 'center' }}>{startDateObject ? startDateObject.toDateString() : null}</p>
+              <p style={{ textAlign: 'center' }}>{dateDisplayLabel ? dateDisplayLabel : null}</p>
               <h6 style={{ textAlign: 'center' }}>{fromTime ? fromTime : null} - {toTime ? toTime : null}</h6>
               <hr />
               <Form.Group as={Row} controlId="formHorizontalFrom">
