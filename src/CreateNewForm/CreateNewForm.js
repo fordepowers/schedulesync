@@ -1,4 +1,5 @@
 import React from 'react';
+import ValDatePicker from '../CustomDatepicker/index.js'
 import './CreateNewForm.css';
 import { Button, Form, Col, Row, Tabs, Tab } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
@@ -14,7 +15,8 @@ class CreateNewForm extends React.Component {
     this.state = {
       singleDayEvent: true,
       fromTime: '14:00',
-      toTime: '16:00'
+      toTime: '16:00',
+      isVisible: false,
     };
   }
 
@@ -62,6 +64,7 @@ class CreateNewForm extends React.Component {
       startDate: startDate
     });
     this.resetWeekdays();
+    console.log(startDate)
   }
 
   storeEndDate = (endDate) => {
@@ -71,6 +74,8 @@ class CreateNewForm extends React.Component {
     });
     this.resetWeekdays();
   }
+
+  changeVisibility = (event) => {this.setState({ ...this.state, isVisible: !this.state.isVisible })}
 
   changeFromTime = (fromTime) => this.setState({ fromTime })
   changeToTime = (toTime) => this.setState({ toTime })
@@ -172,7 +177,10 @@ class CreateNewForm extends React.Component {
                       {singleDayEvent ? "Date" : "Start Date"}
                     </Form.Label>
                     <br />
-                    <DatePicker selected={this.state.startDate} onChange={this.storeStartDate} />
+                      <input className={'react-datepicker__input-container'} type='text' value={this.state.startDate}/>
+                    <ValDatePicker onDateSelected={this.storeStartDate} visible={this.state.isVisible} visibilityCallback={this.changeVisibility}>
+                    </ValDatePicker>
+                    {/* <DatePicker selected={this.state.startDate} onChange={this.storeStartDate} /> */}
                     <br />
                     {singleDayEvent ? null :
                       <div>
