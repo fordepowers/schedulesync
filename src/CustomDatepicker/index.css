@@ -3,7 +3,7 @@
     display: grid;
     width: auto;
     height: auto;
-    grid-auto-columns: 2.95rem;
+    grid-auto-columns: 2.6rem;
     grid-auto-rows: minmax(min-content, max-content);
 }
 

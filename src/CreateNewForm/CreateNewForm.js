@@ -16,7 +16,8 @@ class CreateNewForm extends React.Component {
       singleDayEvent: true,
       fromTime: '14:00',
       toTime: '16:00',
-      isVisible: false,
+      startIsVisible: false,
+      endIsVisible: false,
     };
   }
 
@@ -74,7 +75,8 @@ class CreateNewForm extends React.Component {
     this.resetWeekdays();
   }
 
-  changeVisibility = (event) => {this.setState({ ...this.state, isVisible: !this.state.isVisible })}
+  changeStartVisibility = (event) => { this.setState({ ...this.state, startIsVisible: !this.state.startIsVisible }) }
+  changeEndVisibility = (event) => { this.setState({ ...this.state, endIsVisible: !this.state.endIsVisible }) }
 
   changeFromTime = (fromTime) => this.setState({ fromTime })
   changeToTime = (toTime) => this.setState({ toTime })
@@ -177,19 +179,20 @@ class CreateNewForm extends React.Component {
                     </Form.Label>
                     <br />
                     <div className="relative">
-                    <input className={'react-datepicker__input-container'} onFocus={(e) => {this.setState({ ...this.state, isVisible: true }); e.target.blur()}}  type='text' value={this.state.startDate} readOnly/>
-                    <ValDatePicker onDateSelected={this.storeStartDate} visible={this.state.isVisible} visibilityCallback={this.changeVisibility}>
-                    </ValDatePicker>
+                      <input className={'react-datepicker__input-container'} onFocus={(e) => { this.setState({ ...this.state, isVisible: true }); e.target.blur() }} type='text' value={this.state.startDate} readOnly />
+                      <ValDatePicker onDateSelected={this.storeStartDate} visible={this.state.startIsVisible} visibilityCallback={this.changeStartVisibility} />
                     </div>
-                      
-                    {/* <DatePicker selected={this.state.startDate} onChange={this.storeStartDate} /> */}
+
                     <br />
                     {singleDayEvent ? null :
                       <div>
                         <br />
                         <Form.Label>End Date</Form.Label>
                         <br />
-                        <DatePicker selected={this.state.endDate} onChange={this.storeEndDate} />
+                        <div className="relative">
+                          <input className={'react-datepicker__input-container'} onFocus={(e) => { this.setState({ ...this.state, isVisible: true }); e.target.blur() }} type='text' value={this.state.endDate} readOnly />
+                          <ValDatePicker onDateSelected={this.storeEndDate} visible={this.state.endIsVisible} visibilityCallback={this.changeEndVisibility} />
+                        </div>
                       </div>
                     }
                   </Form.Group>

@@ -30,21 +30,11 @@ const Datepicker = (props) => {
   const [selectedCell, setSelectedCell] = useState({});
   const wrapperRef = useRef(null);
 
-//   useEffect(() => {
-//     function callback (ev) {
-//       if (wrapperRef.current && !wrapperRef.current.contains(ev.target) && visible) {
-//         visibilityCallback(false);
-//       }
-//     }
-
-//     document.addEventListener('mousedown', callback);
-//   });
-
-    useEffect(() => {
-        if (visible === true) {
-            wrapperRef.current.focus();
-        }
-    }, [visible])
+  useEffect(() => {
+    if (visible === true) {
+      wrapperRef.current.focus();
+    }
+  }, [visible]);
   const onLeftButtonClick = () => {
     /* Reset selected cell */
     setSelectedCell({});
@@ -201,8 +191,8 @@ function renderDatePicker (
   });
 }
 
-function formatDate(date) {
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+function formatDate (date) {
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 }
 /**
  *
