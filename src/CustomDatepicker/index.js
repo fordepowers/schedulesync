@@ -30,15 +30,21 @@ const Datepicker = (props) => {
   const [selectedCell, setSelectedCell] = useState({});
   const wrapperRef = useRef(null);
 
-  useEffect(() => {
-    function callback (ev) {
-      if (wrapperRef.current && !wrapperRef.current.contains(ev.target)) {
-        visibilityCallback(false);
-      }
-    }
+//   useEffect(() => {
+//     function callback (ev) {
+//       if (wrapperRef.current && !wrapperRef.current.contains(ev.target) && visible) {
+//         visibilityCallback(false);
+//       }
+//     }
 
-    document.addEventListener('mousedown', callback);
-  }, []);
+//     document.addEventListener('mousedown', callback);
+//   });
+
+    useEffect(() => {
+        if (visible === true) {
+            wrapperRef.current.focus();
+        }
+    }, [visible])
   const onLeftButtonClick = () => {
     /* Reset selected cell */
     setSelectedCell({});
@@ -57,7 +63,7 @@ const Datepicker = (props) => {
   };
 
   return (
-    <div ref={wrapperRef} id='ss-datepicker' className={visible ? 'slide-in-top' : ''} style={{ visibility: visible ? 'visible' : 'collapse' }}>
+    <div ref={wrapperRef} tabIndex={0} onBlur={() => visibilityCallback(false)} id='ss-datepicker' className={visible ? 'slide-in-top' : ''} style={{ visibility: visible ? 'visible' : 'collapse' }}>
       <div className='grid-container'>
         <div className='ss-title-bar'>
           <div
@@ -165,7 +171,8 @@ function renderDatePicker (
       <div
         key={date.getTime()}
 
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault();
           /* Dates not within current month are not selectable */
           if (!isDateCellSelectable(date, currentMonth)) return;
 
@@ -177,7 +184,8 @@ function renderDatePicker (
           });
 
           visibilityCallback(false);
-          onDateSelected(date);
+
+          onDateSelected(formatDate(date));
         }}
         className={[
           'dp-cell',
@@ -193,6 +201,9 @@ function renderDatePicker (
   });
 }
 
+function formatDate(date) {
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+}
 /**
  *
  * @param {Date} iterator The current iterator

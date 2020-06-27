@@ -67,3 +67,7 @@ div.DayPicker-Weekday.Selected:hover {
   color: white;
   border-color: #0062cc;
 }
+
+.relative {
+    position: relative;;
+}

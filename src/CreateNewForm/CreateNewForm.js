@@ -64,7 +64,6 @@ class CreateNewForm extends React.Component {
       startDate: startDate
     });
     this.resetWeekdays();
-    console.log(startDate)
   }
 
   storeEndDate = (endDate) => {
@@ -177,9 +176,12 @@ class CreateNewForm extends React.Component {
                       {singleDayEvent ? "Date" : "Start Date"}
                     </Form.Label>
                     <br />
-                      <input className={'react-datepicker__input-container'} type='text' value={this.state.startDate}/>
+                    <div className="relative">
+                    <input className={'react-datepicker__input-container'} onFocus={(e) => {this.setState({ ...this.state, isVisible: true }); e.target.blur()}}  type='text' value={this.state.startDate} readOnly/>
                     <ValDatePicker onDateSelected={this.storeStartDate} visible={this.state.isVisible} visibilityCallback={this.changeVisibility}>
                     </ValDatePicker>
+                    </div>
+                      
                     {/* <DatePicker selected={this.state.startDate} onChange={this.storeStartDate} /> */}
                     <br />
                     {singleDayEvent ? null :

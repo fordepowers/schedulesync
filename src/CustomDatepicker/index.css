@@ -60,11 +60,13 @@
     border-radius: 0.25rem;
     background: #f7fafc;
     position: absolute;
-    left: 15px;
+    /* left: 15px; */
     top: 100%;
     font-family: 'Raleway', sans-serif;
 }
-
+#ss-datepicker:focus {
+    outline: none;
+}
 .date-btn {
     padding: 8px 24px;
     display: flex;
@@ -117,9 +119,11 @@
     text-align: center;
 }
 
-.dp-cell:hover:not(.dp-month) {
+.dp-cell:hover:not(.dp-month, .dp-cell-selected) {
     background: #ececec;
 }
+
+
 
 /* Sunday */
 
