@@ -123,9 +123,8 @@ class SyncOverview extends React.Component {
       <div>
         <NavbarCustom Text='Home' Route='/' />
         <Alert variant='primary'>
-          <p>This URL is the overview page. As data comes in about your Schedule Sync, it will appear here. </p>
-          <hr />
-          <a target='_blank' rel='noopener noreferrer' href={window.location.href}><b>{window.location.href}</b></a>
+          <p style={{fontSize: 'large'}}>This is the overview page. As data comes in about your Schedule Sync, it will appear here.</p>
+          <a target='_blank' rel='noopener noreferrer' href={window.location.href}><p className='links'>{window.location.href}</p></a>
         </Alert>
         <SyncResults data={data} />
         <Accordion defaultActiveKey='0'>
@@ -143,11 +142,10 @@ class SyncOverview extends React.Component {
           </Card>
         </Accordion>
         <Alert variant='secondary'>
-          <Alert.Heading>Send this link out:</Alert.Heading>
-          <p>This URL is the one you send to friends and family. As they fill out the information, the responses will show up here.</p>
+          <p style={{fontSize: 'large'}}>This link is the one you send to people. As they fill out the information, the responses will show up here.</p>
           <hr />
-          <a target='_blank' rel='noopener noreferrer' href={userFormURL}><b>{userFormURL}</b></a>
-          <hr />
+          <h5>Send this link out:</h5>
+          <a target='_blank' rel='noopener noreferrer' href={userFormURL}><p className='links'>{userFormURL}</p></a>
           <div id='qrcode'><QRCode value={userFormURL} bgColor='#e2e3e5' /></div>
         </Alert>
       </div>

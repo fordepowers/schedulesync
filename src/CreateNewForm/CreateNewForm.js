@@ -2,7 +2,6 @@ import React from 'react';
 import CustomDatepicker from '../CustomDatepicker/index.js'
 import './CreateNewForm.css';
 import { Button, Form, Col, Row, Tabs, Tab } from 'react-bootstrap';
-import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'react-time-picker';
 import Switch from "react-switch";
 import firebase from '../firebase/firebase';

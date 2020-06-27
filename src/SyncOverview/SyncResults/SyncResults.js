@@ -30,7 +30,7 @@ class SyncResults extends React.Component {
       <div>
         <div className='content-section implementation'>
           <Alert variant='light'>
-            <Alert.Heading>{this.props.data.title}</Alert.Heading>
+            <h3>{this.props.data.title}</h3>
             <hr />
             {this.props.data.datasets[0].data === undefined
               ? <div id='loadingSpinny'>
@@ -39,7 +39,7 @@ class SyncResults extends React.Component {
                 </Spinner> <p>Waiting for entries...</p>
               </div>
               : <div>
-                <h5>Time Free for: {weekdayLabel || this.props.data.dateRange.startDate}</h5>
+                <h6>Time Free for: <br /> {weekdayLabel || this.props.data.dateRange.startDate}</h6>
                 <Chart type='horizontalBar' data={this.props.data} />
               </div>}
             <hr />
