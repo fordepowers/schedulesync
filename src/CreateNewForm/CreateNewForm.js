@@ -1,8 +1,7 @@
 import React from 'react';
-import ValDatePicker from '../CustomDatepicker/index.js'
+import CustomDatepicker from '../CustomDatepicker/index.js'
 import './CreateNewForm.css';
 import { Button, Form, Col, Row, Tabs, Tab } from 'react-bootstrap';
-import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'react-time-picker';
 import Switch from "react-switch";
@@ -179,19 +178,18 @@ class CreateNewForm extends React.Component {
                     </Form.Label>
                     <br />
                     <div className="relative">
-                      <input className={'react-datepicker__input-container'} onFocus={(e) => { this.setState({ ...this.state, isVisible: true }); e.target.blur() }} type='text' value={this.state.startDate} readOnly />
-                      <ValDatePicker onDateSelected={this.storeStartDate} visible={this.state.startIsVisible} visibilityCallback={this.changeStartVisibility} />
+                      <input className={'react-datepicker__input-container'} onFocus={(e) => { this.setState({ ...this.state, startIsVisible: true }); e.target.blur() }} type='text' value={this.state.startDate} readOnly />
+                      <CustomDatepicker onDateSelected={this.storeStartDate} visible={this.state.startIsVisible} visibilityCallback={this.changeStartVisibility} />
                     </div>
 
                     <br />
                     {singleDayEvent ? null :
                       <div>
-                        <br />
                         <Form.Label>End Date</Form.Label>
                         <br />
                         <div className="relative">
-                          <input className={'react-datepicker__input-container'} onFocus={(e) => { this.setState({ ...this.state, isVisible: true }); e.target.blur() }} type='text' value={this.state.endDate} readOnly />
-                          <ValDatePicker onDateSelected={this.storeEndDate} visible={this.state.endIsVisible} visibilityCallback={this.changeEndVisibility} />
+                          <input className={'react-datepicker__input-container'} onFocus={(e) => { this.setState({ ...this.state, endIsVisible: true }); e.target.blur() }} type='text' value={this.state.endDate} readOnly />
+                          <CustomDatepicker onDateSelected={this.storeEndDate} visible={this.state.endIsVisible} visibilityCallback={this.changeEndVisibility} />
                         </div>
                       </div>
                     }
