@@ -1,18 +1,22 @@
 import React from 'react';
 import QRCode from 'qrcode.react';
-import Alert from 'react-bootstrap/Alert';
 import './SyncOverview.css';
 import SyncResults from './SyncResults/SyncResults';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 import TableView from './TableView/TableView';
-import { Accordion, Card } from 'react-bootstrap';
+import { Accordion, Card, CardGroup, Button } from 'react-bootstrap';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Checkmark } from 'react-checkmark'
 
 
 class SyncOverview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      overviewCopied: false,
+      userCopied: false,
+      displayQR: false
     };
   }
 
@@ -30,11 +34,6 @@ class SyncOverview extends React.Component {
           }
         });
     }
-
-    /**
-     * Next, we will set up the event listener that updates the components when 
-     * new entries are recieved 
-     */
 
     /* Save a reference to the Sync Form from Firebase */
     let formRef = firebase.getFormRef(this.state.key).child('/');
@@ -97,7 +96,7 @@ class SyncOverview extends React.Component {
         startDate: dateRange ? dateRange.startDate : null,
         toTime: dateRange ? dateRange.toTime : null,
         endDate: dateRange ? dateRange.endDate : null,
-        weekdays: dateRange? dateRange.weekdays : null
+        weekdays: dateRange ? dateRange.weekdays : null
       },
       description: this.state.description,
       singleDayEvent: this.state.singleDayEvent,
@@ -113,41 +112,64 @@ class SyncOverview extends React.Component {
     };
 
     let userFormURL = window.location.href;
-    const index = userFormURL.indexOf('/overview/');
-    userFormURL = userFormURL.slice(0, index);
-    userFormURL = userFormURL + '/user-form/' + this.state.key;
-
-    console.log(this.state);
+    let index = userFormURL.indexOf('/overview/');
+    userFormURL = userFormURL.slice(0, index) + '/user-form/' + this.state.key;
 
     return (
       <div>
         <NavbarCustom Text='Home' Route='/' />
-        <Alert variant='primary'>
-          <p style={{fontSize: 'large'}}>This is the overview page. As data comes in about your Schedule Sync, it will appear here.</p>
-          <a target='_blank' rel='noopener noreferrer' href={window.location.href}><p className='links'>{window.location.href}</p></a>
-        </Alert>
-        <SyncResults data={data} />
-        <Accordion defaultActiveKey='0'>
-          <Card>
-            <Card.Header>
-              <Accordion.Toggle className='accordion-header' as={Card.Body} eventKey='1'>
-                <h5>Individuals</h5>
-              </Accordion.Toggle>
-              <Accordion.Collapse className='accordion-collapse' eventKey='1'>
-                <Card.Body>
-                  <TableView data={data} />
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card.Header>
+        <div style={{ margin: '25px', padding: '1.25rem' }}>
+          <SyncResults data={data} />
+        </div>
+        {this.state.data === undefined || this.state.data === null ? null :
+          <Accordion defaultActiveKey='0'>
+            <Card>
+              <Card.Header>
+                <Accordion.Toggle className='accordion-header' as={Card.Body} eventKey='1'>
+                  <h6>Individual Responses</h6>
+                </Accordion.Toggle>
+                <Accordion.Collapse className='accordion-collapse' eventKey='1'>
+                  <Card.Body>
+                    <TableView data={data} />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card.Header>
+            </Card>
+          </Accordion>}
+
+        <CardGroup>
+          {/* <Card style={{ margin: '25px' }}>
+            <Card.Body>
+              <Card.Title>Overview Page</Card.Title>
+              <Card.Text>
+                <p style={{ fontSize: 'medium' }}>This is the overview page. As data comes in about your Schedule Sync, it will appear here.</p>
+              </Card.Text>
+              <a target='_blank' rel='noopener noreferrer' href={window.location.href}><p className='links'>{window.location.href}</p></a>
+              <Card.Text>
+                <CopyToClipboard text={window.location.href} onCopy={() => this.setState({ overviewCopied: true })}>
+                  <Button style={{ width: '100px' }}>{this.state.overviewCopied ? <Checkmark size='medium' /> : 'Copy Link'}</Button>
+                </CopyToClipboard>
+              </Card.Text>
+            </Card.Body>
+          </Card> */}
+          <Card style={{ margin: '0 25px 25px 25px' }}>
+            <Card.Body>
+              <Card.Title>User Page</Card.Title>
+              <Card.Text>
+                <p style={{ fontSize: 'medium' }}>This link is the one you send to people. As they fill out their availability, the responses will show up.</p>
+              </Card.Text>
+              <a target='_blank' rel='noopener noreferrer' href={userFormURL}><p className='links'>{userFormURL}</p></a>
+              <Card.Text>
+                <CopyToClipboard text={userFormURL} onCopy={() => this.setState({ userCopied: true })}>
+                  <Button style={{ width: '100px' }}>{this.state.userCopied ? <Checkmark size='medium' /> : 'Copy Link'}</Button>
+                </CopyToClipboard>
+                <br />
+                {this.state.displayQR ? <div id='qrcode'><QRCode size={80} value={userFormURL} bgColor='#fff' /></div> :
+                  <Button id='generate-qr' onClick={() => this.setState({ displayQR: true })}>Display QR Code</Button>}
+              </Card.Text>
+            </Card.Body>
           </Card>
-        </Accordion>
-        <Alert variant='secondary'>
-          <p style={{fontSize: 'large'}}>This link is the one you send to people. As they fill out the information, the responses will show up here.</p>
-          <hr />
-          <h5>Send this link out:</h5>
-          <a target='_blank' rel='noopener noreferrer' href={userFormURL}><p className='links'>{userFormURL}</p></a>
-          <div id='qrcode'><QRCode value={userFormURL} bgColor='#e2e3e5' /></div>
-        </Alert>
+        </CardGroup>
       </div>
     );
   }
