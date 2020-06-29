@@ -6,6 +6,7 @@ import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
 import TableView from './TableView/TableView';
 import { Accordion, Card, CardGroup, Button } from 'react-bootstrap';
+import { eachHourOfInterval, eachDayOfInterval, format } from 'date-fns'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Checkmark } from 'react-checkmark'
 
@@ -44,26 +45,26 @@ class SyncOverview extends React.Component {
         return;
       }
     });
-
-    const { singleDayEvent } = this.state;
-
-    if (singleDayEvent) {
-      this.handleAllDayForm()
-    } else {
-      console.log("Not implemented!");
-    }
   }
 
+  handleSingleDay() {
+    const { startDate, fromTime, toTime } = this.state.dateRange;
+    let startTimeObject = new Date(startDate + ' ' + fromTime);
+    let endTimeObject = new Date(startDate + ' ' + toTime);
 
-  handleAllDayForm = () => {
-    const { startDate } = this.state.dateRange.startDate;
-    let date = new Date(startDate);
-    let times = [];
+    let hours = eachHourOfInterval({ start: startTimeObject, end: endTimeObject })
+    console.log(hours)
+  }
 
-    for (let i = 0; i < 24; i++) {
-      times.push(date.getHours());
-      date.setHours(date.getHours() + 1);
-    }
+  handleDateRange() {
+    const { startDate, endDate, fromTime, toTime } = this.state.dateRange;
+
+    let days = eachDayOfInterval({ start: new Date(startDate), end: new Date(endDate) });
+    let daysAndHours = [];
+    days.forEach(day => {
+      daysAndHours.push(eachHourOfInterval({ start: new Date(format(day, 'MM/dd/yyyy') + ' ' + fromTime), end: new Date(format(day, 'MM/dd/yyyy') + ' ' + toTime) }))
+    });
+    console.log(daysAndHours)
   }
 
   calculateTimes = (data, from, to) => {
@@ -89,7 +90,7 @@ class SyncOverview extends React.Component {
   }
 
   render() {
-    const { dateRange } = this.state
+    const { dateRange, singleDayEvent, title, description } = this.state
     const data = {
       dateRange: {
         fromTime: dateRange ? dateRange.fromTime : null,
@@ -110,6 +111,18 @@ class SyncOverview extends React.Component {
         }
       ]
     };
+
+    if (singleDayEvent) {
+      console.log('Handling a single day!')
+      this.handleSingleDay()
+    } else if (dateRange) {
+      if (dateRange.weekdays) {
+        console.log('Handling weekdays!')
+      } else if (dateRange.endDate) {
+        console.log('Handling a date range!')
+        this.handleDateRange()
+      }
+    }
 
     let userFormURL = window.location.href;
     let index = userFormURL.indexOf('/overview/');
@@ -138,11 +151,11 @@ class SyncOverview extends React.Component {
           </Accordion>}
 
         <CardGroup>
-          {/* <Card style={{ margin: '25px' }}>
+          <Card style={{ margin: '25px' }}>
             <Card.Body>
               <Card.Title>Overview Page</Card.Title>
-              <Card.Text>
-                <p style={{ fontSize: 'medium' }}>This is the overview page. As data comes in about your Schedule Sync, it will appear here.</p>
+              <Card.Text style={{ fontSize: 'medium' }}>
+                This (the current page) is the overview page. As data comes in about your Schedule Sync, it will appear here.
               </Card.Text>
               <a target='_blank' rel='noopener noreferrer' href={window.location.href}><p className='links'>{window.location.href}</p></a>
               <Card.Text>
@@ -151,12 +164,12 @@ class SyncOverview extends React.Component {
                 </CopyToClipboard>
               </Card.Text>
             </Card.Body>
-          </Card> */}
+          </Card>
           <Card style={{ margin: '0 25px 25px 25px' }}>
             <Card.Body>
               <Card.Title>User Page</Card.Title>
-              <Card.Text>
-                <p style={{ fontSize: 'medium' }}>This link is the one you send to people. As they fill out their availability, the responses will show up.</p>
+              <Card.Text style={{ fontSize: 'medium' }}>
+                This link is the one you send to people. As they fill out their availability, the responses will show up.
               </Card.Text>
               <a target='_blank' rel='noopener noreferrer' href={userFormURL}><p className='links'>{userFormURL}</p></a>
               <Card.Text>
@@ -164,8 +177,10 @@ class SyncOverview extends React.Component {
                   <Button style={{ width: '100px' }}>{this.state.userCopied ? <Checkmark size='medium' /> : 'Copy Link'}</Button>
                 </CopyToClipboard>
                 <br />
-                {this.state.displayQR ? <div id='qrcode'><QRCode size={80} value={userFormURL} bgColor='#fff' /></div> :
-                  <Button id='generate-qr' onClick={() => this.setState({ displayQR: true })}>Display QR Code</Button>}
+                {this.state.displayQR ?
+                  <div id='qrcode'><QRCode size={80} value={userFormURL} bgColor='#fff' /></div> :
+                  <Button id='generate-qr' onClick={() => this.setState({ displayQR: true })}>Display QR Code</Button>
+                }
               </Card.Text>
             </Card.Body>
           </Card>

@@ -11,11 +11,36 @@ class SyncResults extends React.Component {
 
   displayWeekdayLabel (weekdays) {
     let weekdayLabel = '';
+    let su, m, tu, w, th, f, sa;
     for (const [key, value] of Object.entries(weekdays)) {
-      if (value === true) {
-        weekdayLabel = weekdayLabel + `${key}, `;
+      switch (key) {
+        case 'Sunday':
+          su = true;
+          break;
+        case 'Monday':
+          m = true;
+          break;
+        case 'Tuesday':
+          tu = true;
+          break;
+        case 'Wednesday':
+          w = true;
+          break;
+        case 'Thursday':
+          th = true;
+          break;
+        case 'Friday':
+          f = true;
+          break;
+        case 'Saturday':
+          sa = true;
+          break;
+        default:
+          break;
       }
     }
+
+    weekdayLabel = `${su ? 'Sunday, ' : ''}${m ? 'Monday, ' : ''}${tu ? 'Tuesday, ' : ''}${w ? 'Wednesday, ' : ''}${th ? 'Thursday, ' : ''}${f ? 'Friday, ' : ''}${sa ? 'Saturday, ' : ''}`;
     return weekdayLabel.slice(0, -1).slice(0, -1) + '.';
   }
 
@@ -34,7 +59,7 @@ class SyncResults extends React.Component {
         <div className='content-section implementation'>
           <h3 style={{ textAlign: 'left' }}>{this.props.data.title}</h3>
           <hr />
-          <h6>Time free during: <br /> {weekdayLabel || dateRangeLabel || this.props.data.dateRange.startDate}</h6>
+          <h6>{weekdayLabel || dateRangeLabel || this.props.data.dateRange.startDate}</h6>
           {this.props.data.datasets[0].data === undefined || this.props.data.datasets[0].data === null
             ? <div id='loadingSpinny'>
               <Spinner animation='grow' role='status' as='span'>
