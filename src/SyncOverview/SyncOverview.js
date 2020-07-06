@@ -4,7 +4,7 @@ import './SyncOverview.css';
 import SyncResults from './SyncResults/SyncResults';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
-import TableView from './TableView/TableView';
+import IndividualResultsView from './IndividualResultsView/IndividualResultsView';
 import { Accordion, Card, CardGroup, Button } from 'react-bootstrap';
 import { eachHourOfInterval, eachDayOfInterval, format } from 'date-fns'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -47,6 +47,16 @@ class SyncOverview extends React.Component {
     });
   }
 
+  handleWeekdays() {
+    const { weekdays } = this.state.dateRange;
+    // let startTimeObject = new Date(startDate + ' ' + fromTime);
+    // let endTimeObject = new Date(startDate + ' ' + toTime);
+
+    // let hours = eachHourOfInterval({ start: startTimeObject, end: endTimeObject })
+    console.log(weekdays)
+    return <div>Weekdays:</div>
+  }
+
   handleSingleDay() {
     const { startDate, fromTime, toTime } = this.state.dateRange;
     let startTimeObject = new Date(startDate + ' ' + fromTime);
@@ -58,9 +68,9 @@ class SyncOverview extends React.Component {
 
   handleDateRange() {
     const { startDate, endDate, fromTime, toTime } = this.state.dateRange;
-
     let days = eachDayOfInterval({ start: new Date(startDate), end: new Date(endDate) });
     let daysAndHours = [];
+
     days.forEach(day => {
       daysAndHours.push(eachHourOfInterval({ start: new Date(format(day, 'MM/dd/yyyy') + ' ' + fromTime), end: new Date(format(day, 'MM/dd/yyyy') + ' ' + toTime) }))
     });
@@ -112,12 +122,15 @@ class SyncOverview extends React.Component {
       ]
     };
 
+    let weekdayTable;
+
     if (singleDayEvent) {
       console.log('Handling a single day!')
       this.handleSingleDay()
     } else if (dateRange) {
       if (dateRange.weekdays) {
         console.log('Handling weekdays!')
+        weekdayTable = this.handleWeekdays()
       } else if (dateRange.endDate) {
         console.log('Handling a date range!')
         this.handleDateRange()
@@ -143,7 +156,7 @@ class SyncOverview extends React.Component {
                 </Accordion.Toggle>
                 <Accordion.Collapse className='accordion-collapse' eventKey='1'>
                   <Card.Body>
-                    <TableView data={data} />
+                    <IndividualResultsView data={data} />
                   </Card.Body>
                 </Accordion.Collapse>
               </Card.Header>

@@ -1,6 +1,7 @@
 import React from 'react';
 import './SyncResults.css';
 import Spinner from 'react-bootstrap/Spinner';
+import WeekdayView from './WeekdayView/WeekdayView';
 import { Chart } from '@bit/primefaces.primereact.chart';
 
 class SyncResults extends React.Component {
@@ -70,6 +71,7 @@ class SyncResults extends React.Component {
             : <div>
               <Chart type='horizontalBar' data={this.props.data} />
             </div>}
+          {weekdayLabel ? <WeekdayView data={this.props.data} /> : null}
           <hr />
           {!this.props.data.recommendedTime ? null
             : <div>
