@@ -1,18 +1,23 @@
 import React from 'react';
 import QRCode from 'qrcode.react';
-import Alert from 'react-bootstrap/Alert';
 import './SyncOverview.css';
 import SyncResults from './SyncResults/SyncResults';
 import NavbarCustom from '../NavbarCustom/NavbarCustom';
 import firebase from '../firebase/firebase';
-import TableView from './TableView/TableView';
-import { Accordion, Card } from 'react-bootstrap';
+import IndividualResultsView from './IndividualResultsView/IndividualResultsView';
+import { Accordion, Card, CardGroup, Button } from 'react-bootstrap';
+import { eachHourOfInterval, eachDayOfInterval, format } from 'date-fns'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Checkmark } from 'react-checkmark'
 
 
 class SyncOverview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      overviewCopied: false,
+      userCopied: false,
+      displayQR: false
     };
   }
 
@@ -31,11 +36,6 @@ class SyncOverview extends React.Component {
         });
     }
 
-    /**
-     * Next, we will set up the event listener that updates the components when 
-     * new entries are recieved 
-     */
-
     /* Save a reference to the Sync Form from Firebase */
     let formRef = firebase.getFormRef(this.state.key).child('/');
 
@@ -45,26 +45,36 @@ class SyncOverview extends React.Component {
         return;
       }
     });
-
-    const { singleDayEvent } = this.state;
-
-    if (singleDayEvent) {
-      this.handleAllDayForm()
-    } else {
-      console.log("Not implemented!");
-    }
   }
 
+  handleWeekdays() {
+    const { weekdays } = this.state.dateRange;
+    // let startTimeObject = new Date(startDate + ' ' + fromTime);
+    // let endTimeObject = new Date(startDate + ' ' + toTime);
 
-  handleAllDayForm = () => {
-    const { startDate } = this.state.dateRange.startDate;
-    let date = new Date(startDate);
-    let times = [];
+    // let hours = eachHourOfInterval({ start: startTimeObject, end: endTimeObject })
+    console.log(weekdays)
+    return <div>Weekdays:</div>
+  }
 
-    for (let i = 0; i < 24; i++) {
-      times.push(date.getHours());
-      date.setHours(date.getHours() + 1);
-    }
+  handleSingleDay() {
+    const { startDate, fromTime, toTime } = this.state.dateRange;
+    let startTimeObject = new Date(startDate + ' ' + fromTime);
+    let endTimeObject = new Date(startDate + ' ' + toTime);
+
+    let hours = eachHourOfInterval({ start: startTimeObject, end: endTimeObject })
+    console.log(hours)
+  }
+
+  handleDateRange() {
+    const { startDate, endDate, fromTime, toTime } = this.state.dateRange;
+    let days = eachDayOfInterval({ start: new Date(startDate), end: new Date(endDate) });
+    let daysAndHours = [];
+
+    days.forEach(day => {
+      daysAndHours.push(eachHourOfInterval({ start: new Date(format(day, 'MM/dd/yyyy') + ' ' + fromTime), end: new Date(format(day, 'MM/dd/yyyy') + ' ' + toTime) }))
+    });
+    console.log(daysAndHours)
   }
 
   calculateTimes = (data, from, to) => {
@@ -90,14 +100,14 @@ class SyncOverview extends React.Component {
   }
 
   render() {
-    const { dateRange } = this.state
+    const { dateRange, singleDayEvent, title, description } = this.state
     const data = {
       dateRange: {
         fromTime: dateRange ? dateRange.fromTime : null,
         startDate: dateRange ? dateRange.startDate : null,
         toTime: dateRange ? dateRange.toTime : null,
         endDate: dateRange ? dateRange.endDate : null,
-        weekdays: dateRange? dateRange.weekdays : null
+        weekdays: dateRange ? dateRange.weekdays : null
       },
       description: this.state.description,
       singleDayEvent: this.state.singleDayEvent,
@@ -112,44 +122,82 @@ class SyncOverview extends React.Component {
       ]
     };
 
-    let userFormURL = window.location.href;
-    const index = userFormURL.indexOf('/overview/');
-    userFormURL = userFormURL.slice(0, index);
-    userFormURL = userFormURL + '/user-form/' + this.state.key;
+    let weekdayTable;
 
-    console.log(this.state);
+    if (singleDayEvent) {
+      console.log('Handling a single day!')
+      this.handleSingleDay()
+    } else if (dateRange) {
+      if (dateRange.weekdays) {
+        console.log('Handling weekdays!')
+        weekdayTable = this.handleWeekdays()
+      } else if (dateRange.endDate) {
+        console.log('Handling a date range!')
+        this.handleDateRange()
+      }
+    }
+
+    let userFormURL = window.location.href;
+    let index = userFormURL.indexOf('/overview/');
+    userFormURL = userFormURL.slice(0, index) + '/user-form/' + this.state.key;
 
     return (
       <div>
         <NavbarCustom Text='Home' Route='/' />
-        <Alert variant='primary'>
-          <p>This URL is the overview page. As data comes in about your Schedule Sync, it will appear here. </p>
-          <hr />
-          <a target='_blank' rel='noopener noreferrer' href={window.location.href}><b>{window.location.href}</b></a>
-        </Alert>
-        <SyncResults data={data} />
-        <Accordion defaultActiveKey='0'>
-          <Card>
-            <Card.Header>
-              <Accordion.Toggle className='accordion-header' as={Card.Body} eventKey='1'>
-                <h5>Individuals</h5>
-              </Accordion.Toggle>
-              <Accordion.Collapse className='accordion-collapse' eventKey='1'>
-                <Card.Body>
-                  <TableView data={data} />
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card.Header>
+        <div style={{ margin: '25px', padding: '1.25rem' }}>
+          <SyncResults data={data} />
+        </div>
+        {this.state.data === undefined || this.state.data === null ? null :
+          <Accordion defaultActiveKey='0'>
+            <Card>
+              <Card.Header>
+                <Accordion.Toggle className='accordion-header' as={Card.Body} eventKey='1'>
+                  <h6>Individual Responses</h6>
+                </Accordion.Toggle>
+                <Accordion.Collapse className='accordion-collapse' eventKey='1'>
+                  <Card.Body>
+                    <IndividualResultsView data={data} />
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card.Header>
+            </Card>
+          </Accordion>}
+
+        <CardGroup>
+          <Card style={{ margin: '25px' }}>
+            <Card.Body>
+              <Card.Title>Overview Page</Card.Title>
+              <Card.Text style={{ fontSize: 'medium' }}>
+                This (the current page) is the overview page. As data comes in about your Schedule Sync, it will appear here.
+              </Card.Text>
+              <a target='_blank' rel='noopener noreferrer' href={window.location.href}><p className='links'>{window.location.href}</p></a>
+              <Card.Text>
+                <CopyToClipboard text={window.location.href} onCopy={() => this.setState({ overviewCopied: true })}>
+                  <Button style={{ width: '100px' }}>{this.state.overviewCopied ? <Checkmark size='medium' /> : 'Copy Link'}</Button>
+                </CopyToClipboard>
+              </Card.Text>
+            </Card.Body>
           </Card>
-        </Accordion>
-        <Alert variant='secondary'>
-          <Alert.Heading>Send this link out:</Alert.Heading>
-          <p>This URL is the one you send to friends and family. As they fill out the information, the responses will show up here.</p>
-          <hr />
-          <a target='_blank' rel='noopener noreferrer' href={userFormURL}><b>{userFormURL}</b></a>
-          <hr />
-          <div id='qrcode'><QRCode value={userFormURL} bgColor='#e2e3e5' /></div>
-        </Alert>
+          <Card style={{ margin: '0 25px 25px 25px' }}>
+            <Card.Body>
+              <Card.Title>User Page</Card.Title>
+              <Card.Text style={{ fontSize: 'medium' }}>
+                This link is the one you send to people. As they fill out their availability, the responses will show up.
+              </Card.Text>
+              <a target='_blank' rel='noopener noreferrer' href={userFormURL}><p className='links'>{userFormURL}</p></a>
+              <Card.Text>
+                <CopyToClipboard text={userFormURL} onCopy={() => this.setState({ userCopied: true })}>
+                  <Button style={{ width: '100px' }}>{this.state.userCopied ? <Checkmark size='medium' /> : 'Copy Link'}</Button>
+                </CopyToClipboard>
+                <br />
+                {this.state.displayQR ?
+                  <div id='qrcode'><QRCode size={80} value={userFormURL} bgColor='#fff' /></div> :
+                  <Button id='generate-qr' onClick={() => this.setState({ displayQR: true })}>Display QR Code</Button>
+                }
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </CardGroup>
       </div>
     );
   }
